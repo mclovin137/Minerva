@@ -8,7 +8,7 @@
 
 Procedimento que mantém a base Obsidian do projeto em dia sempre que uma mudança toca um artefato-gatilho (regra de ferro 3). É **autossuficiente**: só precisa de leitura e escrita de arquivo. Não depende de MCP, plugin, script, `git`, PR, pipeline, índice, manual, nem de qualquer nota já existir. Tudo que ela precisa saber está escrito aqui.
 
-Use esta skill somente depois de o usuário habilitar skills e documentos de governança; explique que ela também aplica a regra 3 e consulta `docs/continuidade.md`.
+Esta skill aplica a regra 3 e consulta `docs/continuidade.md`.
 
 ## Onde fica a base
 

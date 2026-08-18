@@ -88,29 +88,27 @@ jobs:
           executar() {
             local nome="$1"
             shift
+            local codigo=0
             : >"$temporario/saida"
             : >"$temporario/erro"
-            printf '%s' '{"tool_name":"Read","tool_input":{}}' | "$@" >"$temporario/saida" 2>"$temporario/erro"
+            printf '%s' '{"tool_name":"Read","tool_input":{}}' | "$@" >"$temporario/saida" 2>"$temporario/erro" || codigo=$?
+            if [ "$codigo" -ne 0 ]; then
+              printf 'Hook falhou: %s (código de saída %s)\n' "$nome" "$codigo" >&2
+              printf 'Comando: %s\n' "$*" >&2
+              printf 'stderr do hook:\n' >&2
+              cat "$temporario/erro" >&2
+              exit 1
+            fi
             if [ -s "$temporario/erro" ]; then
               printf 'Hook gerou stderr: %s\n' "$nome" >&2
               cat "$temporario/erro" >&2
               exit 1
             fi
           }
-          validar_onboarding() {
-            grep -Fq 'Quais documentos e skills do template você quer habilitar nesta sessão?' "$temporario/saida"
-            grep -Fq 'Documentos disponíveis:' "$temporario/saida"
-            grep -Fq 'Skills disponíveis:' "$temporario/saida"
-            grep -Fq 'Agentes e hooks seguem seus contratos e a configuração versionada; não são opções de escolha.' "$temporario/saida"
-          }
           executar 'Claude guarda' bash .claude/hooks/guarda-orquestrador.sh
           executar 'Codex guarda' bash .codex/hooks/guarda-orquestrador.sh
           executar 'Claude sessão' bash .claude/hooks/sessao-orquestrador.sh
           executar 'Codex sessão' bash .codex/hooks/sessao-orquestrador.sh
-          executar 'Claude onboarding' bash .claude/hooks/onboarding-recursos-template.sh
-          validar_onboarding
-          executar 'Codex onboarding' bash .codex/hooks/onboarding-recursos-template.sh
-          validar_onboarding
           cp -a . "$temporario/repo"
           executar 'Claude continuidade init' bash "$temporario/repo/.claude/hooks/sincronizar-continuidade.sh" init
           executar 'Claude continuidade sync' bash "$temporario/repo/.claude/hooks/sincronizar-continuidade.sh" sync
@@ -125,12 +123,25 @@ jobs:
           printf '\nMudação de smoke do hook.\n' >>"$temporario/repo/README.md"
           executar 'Claude continuidade após mutação' bash "$temporario/repo/.claude/hooks/sincronizar-continuidade.sh" sync
           sem_regiao "$continuidade" >"$temporario/depois"
-          cmp -s "$temporario/antes" "$temporario/depois"
+          if ! cmp -s "$temporario/antes" "$temporario/depois"; then
+            printf 'Invariante quebrada: o hook alterou docs/continuidade.md fora da região gerada.\n' >&2
+            diff -u "$temporario/antes" "$temporario/depois" >&2 || true
+            exit 1
+          fi
           cp "$continuidade" "$temporario/primeira-sincronizacao"
           executar 'Codex continuidade idempotente' bash "$temporario/repo/.codex/hooks/sincronizar-continuidade.sh" sync
-          cmp -s "$temporario/primeira-sincronizacao" "$continuidade"
-          test "$(grep -Fc '<!-- minerva-continuity:generated:start -->' "$continuidade")" -eq 1
-          test "$(grep -Fc '<!-- minerva-continuity:generated:end -->' "$continuidade")" -eq 1
+          if ! cmp -s "$temporario/primeira-sincronizacao" "$continuidade"; then
+            printf 'Invariante quebrada: a segunda sincronização não foi idempotente.\n' >&2
+            diff -u "$temporario/primeira-sincronizacao" "$continuidade" >&2 || true
+            exit 1
+          fi
+          for marcador in '<!-- minerva-continuity:generated:start -->' '<!-- minerva-continuity:generated:end -->'; do
+            ocorrencias="$(grep -Fc "$marcador" "$continuidade" || true)"
+            if [ "$ocorrencias" -ne 1 ]; then
+              printf 'Invariante quebrada: o marcador %s deveria aparecer 1 vez em docs/continuidade.md, encontradas %s.\n' "$marcador" "$ocorrencias" >&2
+              exit 1
+            fi
+          done
 
       - name: Rejeitar referências aos artefatos de continuidade substituídos
         shell: bash

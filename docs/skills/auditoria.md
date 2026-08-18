@@ -8,7 +8,7 @@
 
 Auditar uma entrega depois do PR e antes do merge, comparando primeiro a cadeia aprovada e só depois o diff. A auditoria pertence à responsabilidade de **planejar/revisar** e precisa ser feita por agente diferente de quem implementou.
 
-Use esta skill somente depois de o usuário habilitar skills; se agentes também forem usados, explique que a auditoria requer a definição e a responsabilidade de planejar/revisar.
+A auditoria requer a definição e a responsabilidade de planejar/revisar; quem implementou não audita.
 
 ## Origem e adaptação
 

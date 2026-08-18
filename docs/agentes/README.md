@@ -4,9 +4,9 @@
 
 ## Para o futuro agente
 
-Índice dos sete agentes do projeto e o mapeamento de cada um para as três responsabilidades da regra de ferro 4. Após o usuário habilitar agentes, leia antes de assumir um papel: você exerce **um** agente por vez, e o que ele não pode fazer é tão vinculante quanto o que ele faz.
+Índice dos sete agentes do projeto e o mapeamento de cada um para as três responsabilidades da regra de ferro 4. Leia antes de assumir um papel: você exerce **um** agente por vez, e o que ele não pode fazer é tão vinculante quanto o que ele faz.
 
-**Se o usuário habilitou agentes e você é a sessão principal, você é o [Batman](batman.md)** — e não toca em arquivo.
+**Se você é a sessão principal, você é o [Batman](batman.md)** — e não toca em arquivo.
 
 Estes arquivos são a definição canônica (regra de ferro 1). A base Obsidian documenta que os agentes existem, em `agentes/index.md`; o contrato do projeto está em [`docs/rules.md`](../rules.md).
 
@@ -55,11 +55,10 @@ Em uma frase cada:
 
 ## Adaptadores por ferramenta
 
-Estes arquivos são a **definição canônica** (regra 1). Os adaptadores do Claude Code, declarados em `.claude/settings.json`, apontam para cá e não carregam regra própria:
+Estes arquivos são a **definição canônica** (regra 1). Os adaptadores do Claude Code apontam para cá e não carregam regra própria. Nenhum hook está registrado: `.claude/settings.json` declara `"hooks": {}`, e todos os scripts versionados permanecem inativos até configuração futura autorizada pelo usuário.
 
 | Adaptador | Evento / uso | O que faz |
 |---|---|---|
-| `.claude/hooks/onboarding-recursos-template.sh` | `SessionStart` | Registrado por padrão: injeta o onboarding canônico, sem ativar recursos |
 | `.claude/hooks/sessao-orquestrador.sh`, `guarda-orquestrador.sh`, `sincronizar-continuidade.sh` | disponíveis, inativos | Versionados e validados; só recebem configuração de lifecycle futura por pedido ou autorização explícita do usuário |
 | `.claude/agents/<agente>.md` | despacho de subagente | Declara `model` e `effort` do agente e aponta para o arquivo canônico. Seis arquivos, um por subagente — o Batman não tem, porque é a sessão |
 
@@ -77,3 +76,4 @@ Os sete agentes existem como definição em markdown, com adaptador Claude para 
 - 2026-08-16 — Histórico externo: os bloqueios refletiam detalhes `TBD`; `AGENTS.md` foi reconhecido como adaptador global e o hook de continuidade foi catalogado. Essas referências não são dependências do template limpo.
 - 2026-08-16 — Histórico externo: a continuidade chegou a ser dividida em dois arquivos; a referência não é dependência do template atual.
 - 2026-08-17 — Neutralizado para template agnóstico de tecnologia; somente Git, GitHub e Docker permanecem como fundações fixadas.
+- 2026-08-18 — Removido o contrato de onboarding opt-in: agentes, documentos e skills valem pelos próprios contratos, sem habilitação por sessão. Registrado que nenhum hook está registrado em `.claude/settings.json`.
