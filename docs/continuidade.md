@@ -34,3 +34,8 @@ As alterações de governança, agentes, hooks, playbook e task continuam penden
 ## Próximo passo
 
 Realizar revisão independente e sincronizar as pendências acima antes do prazo.
+
+## Região gerada
+
+<!-- minerva-continuity:generated:start -->
+<!-- minerva-continuity:generated:end -->
