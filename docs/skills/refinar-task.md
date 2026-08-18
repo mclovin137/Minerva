@@ -45,7 +45,7 @@ Não repetir por futura task. Fazer rodada complementar somente quando o escopo 
 
 ## Pré-requisitos
 
-1. Ler `docs/rules.md`, `docs/plan.md`, `docs/state.md` e `docs/lib.md`.
+1. Ler `docs/rules.md`, `docs/continuidade.md` e `docs/lib.md`.
 2. Identificar roadmap, épico, decisões do usuário, ADRs e documentos vigentes relacionados.
 3. Confirmar que o épico tem objetivo e contorno suficientes para análise. Se nem o problema ou resultado esperado estiver definido, registrar `❓ LACUNA` e devolver ao usuário antes de mobilizar pareceres técnicos.
 4. Procurar refinamento anterior e comparar seu escopo com o atual.

@@ -2,9 +2,9 @@
 
 ## Para o futuro agente
 
-Índice dos sete agentes do projeto e o mapeamento de cada um para as três responsabilidades da regra de ferro 4. Leia antes de assumir um papel: você exerce **um** agente por vez, e o que ele não pode fazer é tão vinculante quanto o que ele faz.
+Índice dos sete agentes do projeto e o mapeamento de cada um para as três responsabilidades da regra de ferro 4. Após o usuário habilitar agentes, leia antes de assumir um papel: você exerce **um** agente por vez, e o que ele não pode fazer é tão vinculante quanto o que ele faz.
 
-**Se você é a sessão principal, você é o [Homem de Ferro](homem-de-ferro.md)** — e não toca em arquivo.
+**Se o usuário habilitou agentes e você é a sessão principal, você é o [Homem de Ferro](homem-de-ferro.md)** — e não toca em arquivo.
 
 Estes arquivos são a definição canônica (regra de ferro 1). A base Obsidian documenta que os agentes existem, em `agentes/index.md`; o contrato do projeto está em [`docs/rules.md`](../rules.md).
 
@@ -57,9 +57,8 @@ Estes arquivos são a **definição canônica** (regra 1). Os adaptadores do Cla
 
 | Adaptador | Evento / uso | O que faz |
 |---|---|---|
-| `.claude/hooks/sessao-orquestrador.sh` | `SessionStart` | Injeta [homem-de-ferro.md](homem-de-ferro.md) no contexto da sessão |
-| `.claude/hooks/guarda-orquestrador.sh` | `PreToolUse` | Nega `Write`/`Edit`/`NotebookEdit` e Bash mutante quando a chamada **não** vem de subagente |
-| `.claude/hooks/sincronizar-continuidade.sh` | `SessionStart` e `PostToolUse` | Inicializa o snapshot e sincroniza somente as seções geradas de `docs/plan.md` e `docs/state.md` |
+| `.claude/hooks/onboarding-recursos-template.sh` | `SessionStart` | Registrado por padrão: injeta o onboarding canônico, sem ativar recursos |
+| `.claude/hooks/sessao-orquestrador.sh`, `guarda-orquestrador.sh`, `sincronizar-continuidade.sh` | disponíveis, inativos | Versionados e validados; só recebem configuração de lifecycle futura por pedido ou autorização explícita do usuário |
 | `.claude/agents/<agente>.md` | despacho de subagente | Declara `model` e `effort` do agente e aponta para o arquivo canônico. Seis arquivos, um por subagente — o Homem de Ferro não tem, porque é a sessão |
 
 `AGENTS.md` é o adaptador global do Codex e de agentes compatíveis. Ainda não há adaptadores **por agente** fora do Claude Code; essas ferramentas leem as definições canônicas diretamente, e a regra vale por leitura, não por bloqueio automático.
@@ -74,5 +73,5 @@ Os sete agentes existem como definição em markdown, com adaptador Claude para 
 - 2026-08-15 — Registrado o modelo de cada agente, definido pelo usuário: `opus`/`gpt-5.6-agua` com esforço alto para Yoda e Neo; `sonnet`/`gpt-5.6-terra` com esforço medium para Ted Mosby e Jarvis; `gpt-5.6-luna` medium, só Codex, para Severino; sessão herdada para o Homem de Ferro. Criados os cinco adaptadores em `.claude/agents/`.
 - 2026-08-16 — Corrigidas as fronteiras: Severino responde por todo o código da aplicação, incluindo back-end, front-end e pipeline-as-code; Jarvis define os gates pré-deploy e responde pela operação após a liberação. Registrada também a simplificação dos adaptadores para frontmatter de despacho, ponteiro canônico e regra de idioma.
 - 2026-08-16 — Histórico externo: os bloqueios refletiam detalhes `TBD`; `AGENTS.md` foi reconhecido como adaptador global e o hook de continuidade foi catalogado. Essas referências não são dependências do template limpo.
-- 2026-08-16 — Reconciliado com `agentes/index.md` da base: recuperadas a seção *Modelo por agente*, a linha do hook `sincronizar-continuidade.sh` na tabela de adaptadores, o estado e o histórico. Os caminhos dos artefatos de continuidade passaram a ser declarados como `docs/plan.md` e `docs/state.md`, que é onde os arquivos realmente estão.
+- 2026-08-16 — Histórico externo: a continuidade chegou a ser dividida em dois arquivos; a referência não é dependência do template atual.
 - 2026-08-17 — Neutralizado para template agnóstico de tecnologia; somente Git, GitHub e Docker permanecem como fundações fixadas.

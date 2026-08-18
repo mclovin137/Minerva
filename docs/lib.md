@@ -10,7 +10,7 @@ Inventário canônico de dependências, runtimes e serviços necessários para u
 ## Regras de manutenção
 
 - Manifesto e lockfile são a evidência das versões resolvidas; não os substitua por memória ou documentação externa.
-- Toda adição, remoção ou upgrade relevante também atualiza a nota oficial de dependências no Obsidian.
+- Toda adição, remoção ou upgrade relevante registra imediatamente em `docs/continuidade.md` a pendência para a nota oficial de dependências no Obsidian e a sincroniza no prazo da regra 3.
 - Dependência nova passa por `auditar-dependencias` e análise do Neo antes de entrar.
 - Nenhuma dependência ou serviço pode contrariar o custo financeiro zero.
 - Segredos, URLs com credenciais, tokens e chaves nunca pertencem a este arquivo.

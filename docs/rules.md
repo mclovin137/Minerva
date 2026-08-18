@@ -12,11 +12,11 @@ Regra nova, mudança ou remoção de regra: **acontece aqui**, nunca em um adapt
 
 ## Estado e continuidade
 
-Os quatro artefatos de continuidade vivem em `docs/`, ao lado deste documento: o contrato canônico é [`docs/rules.md`](rules.md); o planejamento operacional da task ativa vive em [`docs/plan.md`](plan.md); o estado observado do repositório vive em [`docs/state.md`](state.md); e o inventário de dependências vive em [`docs/lib.md`](lib.md). Leia os quatro no início de qualquer sessão e antes de retomar uma task.
+Os três artefatos de continuidade vivem em `docs/`, ao lado deste documento: o contrato canônico é [`docs/rules.md`](rules.md); a continuidade operacional da task ativa vive em [`docs/continuidade.md`](continuidade.md); e o inventário de dependências vive em [`docs/lib.md`](lib.md). Após o opt-in para documentos de governança, leia os três antes de retomar uma task.
 
 **A raiz do repositório não hospeda nenhum deles.** `docs/` é o caminho canônico. Caminho de raiz para esses arquivos é erro, não variante aceitável. A referência anterior a ADRs de continuidade pertence ao histórico externo e não é dependência deste template limpo.
 
-Agentes autorizados atualizam semanticamente `docs/plan.md` e `docs/state.md`. O hook de uma ferramenta pode atualizar somente as seções delimitadas como geradas, sem inferir conclusão, alterar checklist ou substituir julgamento. Ferramentas sem adaptador equivalente registram as mutações manualmente antes de entregar. `docs/lib.md` nunca é atualizado pelo hook: toda dependência exige versão e finalidade verificadas por um agente.
+Agentes autorizados atualizam semanticamente `docs/continuidade.md`. O hook de uma ferramenta pode atualizar somente a região delimitada como gerada, sem inferir conclusão, alterar checklist ou substituir julgamento. Ferramentas sem adaptador equivalente registram as mutações manualmente antes de entregar. `docs/lib.md` nunca é atualizado pelo hook: toda dependência exige versão e finalidade verificadas por um agente.
 
 ---
 
@@ -34,6 +34,7 @@ Não negociáveis. Qualquer proposta que viole uma delas deve ser recusada e sub
 8. **Dois pipelines de CI/CD:** um de review e um de execução dos casos de teste. Ver seção *CI/CD*.
 9. **Exceção enxuta para ajuste básico ou urgente.** Só pode dispensar task e documentação formal com autorização explícita do usuário para aquela mudança e nas condições da seção *Fluxo de trabalho → Exceção enxuta*. Branch nova, PR, revisão independente e segurança continuam obrigatórios.
 10. **Conflito material entre regras exige decisão do usuário.** Quando regras de ferro — ou seus efeitos — colidirem materialmente, o agente para e apresenta trade-offs, alternativas, impacto e a regra excepcional ao usuário; nunca escolhe silenciosamente.
+11. **Recursos do template exigem opt-in do usuário.** Documentos, agentes, skills e hooks são opcionais na sessão e só são usados após escolha explícita do usuário. A única exceção é o onboarding mínimo de [`docs/recursos-template.md`](recursos-template.md), que pergunta antes de qualquer uso; a escolha vale para a sessão, aceita seleção parcial e pode mudar a qualquer momento. Dependências são explicadas antes da ativação, e nada é habilitado silenciosamente.
 ---
 
 ## Escopo da regra 5
@@ -54,7 +55,7 @@ Toda atividade pertence a exatamente uma das três responsabilidades. A separaç
 
 Os agentes concretos estão definidos em `docs/agentes/`: **Homem de Ferro** (orquestrar), **Yoda** (arquitetura), **Severino** (todo o código da aplicação), **Ted Mosby** (QA), **Neo** (segurança), **Jarvis** (SRE) e **c4-diagram-generator** (diagramas C4).
 
-**Orquestrador — é sempre a sessão principal (Homem de Ferro)**
+**Orquestrador — quando habilitado pelo usuário, é a sessão principal (Homem de Ferro)**
 - Interpreta a demanda, localiza a posição dela no fluxo (ver *Fluxo de trabalho*) e delega ao agente certo.
 - Mantém estado: o que está em andamento, o que está bloqueado, o que aguarda auditoria.
 - **Não altera, não cria e não apaga nenhum arquivo** — inclusive por shell (`>`, `rm`, `mv`, `sed -i`, mutações de git). Toda escrita acontece dentro de um agente delegado; não existe mudança pequena demais para delegar.
@@ -70,7 +71,7 @@ Os agentes concretos estão definidos em `docs/agentes/`: **Homem de Ferro** (or
 - Abre o PR e responde ao review.
 - **Não aprova nem faz merge do próprio PR.**
 
-Definições de agentes, roles e skills são markdown neutro, versionado no repositório, consumível por qualquer ferramenta (regra 1). Toda criação/edição/remoção de agente, role ou skill exige atualização do Obsidian (regra 3).
+Definições de agentes, roles e skills são markdown neutro, versionado no repositório, consumível por qualquer ferramenta (regra 1). Seu uso exige o opt-in da regra 11. Toda criação/edição/remoção de agente, role ou skill exige atualização do Obsidian quando documentos de governança estiverem habilitados (regra 3).
 
 ### Catálogo de agentes
 
@@ -95,7 +96,7 @@ Windows : C:\Users\mclov\OneDrive\Documentos\Obsidian Vault\mclov\Documents\Seco
 WSL     : /mnt/c/Users/mclov/OneDrive/Documentos/Obsidian Vault/mclov/Documents/SecondBrain/Bases/Minerva
 ```
 
-**A alteração na base faz parte da task — não é follow-up.** Como a base está fora do repositório, o diff do PR não a mostra: a atualização acontece no mesmo turno da mudança e os caminhos escritos são declarados explicitamente. Um PR que muda qualquer item abaixo sem a nota correspondente é reprovado na auditoria.
+**Todo gatilho vira pendência documental imediata.** Como a base está fora do repositório, o diff do PR não prova sua atualização. Registre em `docs/continuidade.md` a origem, o destino, o responsável e o prazo máximo de 24 horas; sincronize antes se o usuário pedir. A nota só é declarada sincronizada depois de escrita e conferência. A base anterior não pode ser apresentada como atualizada enquanto houver pendência; divergência não é resolvida silenciosamente.
 
 Procedimento obrigatório, com a tabela de gatilhos e o formato das notas: `docs/skills/atualizar-obsidian.md`.
 
@@ -116,13 +117,13 @@ Gatilhos obrigatórios (criação, edição **ou** remoção):
 
 Decisões estruturais e escolhas de tecnologia entram como **ADR** — inclusive as pendências listadas no fim deste documento.
 
-**ADR, PRD, HLD e as notas de responsabilidade têm cópia canônica na base e espelho no repositório** (`docs/adrs/`, `docs/hlds/`, `docs/prds/`, `docs/roles/`). As três regras de sincronia — base primeiro, base vence, só wikilink diverge — estão em *Arquitetura e testes → Cópia canônica e espelho*. Escrever num lado só, em qualquer direção, é gatilho não documentado e reprova na auditoria.
+**ADR, PRD, HLD, FDD e as notas de responsabilidade têm cópia canônica na base e espelho no repositório** (`docs/adrs/`, `docs/hlds/`, `docs/fdds/`, `docs/prds/`, `docs/roles/`). O espelho e a pendência seguem o contrato em *Arquitetura e testes → Cópia canônica e espelho*. Pendência dentro do prazo é rastreável; pendência vencida bloqueia conclusão e trabalho dependente.
 
 ---
 
 ## Fluxo de trabalho
 
-Antes de qualquer delegação, o Homem de Ferro classifica a mudança como **via rápida** ou **fluxo completo**. Se identificar possível exceção enxuta, ele não a inicia nem a classifica autonomamente: explica escopo, motivo, controles mantidos e documentação dispensada, e pede autorização explícita do usuário para aquela mudança. Fora da exceção autorizada da regra 9, a classificação, as validações e os agentes acionados ficam registrados na task e no resumo decisório mínimo de `docs/plan.md` e `docs/state.md`.
+Antes de qualquer delegação, o Homem de Ferro classifica a mudança como **via rápida** ou **fluxo completo**. Se identificar possível exceção enxuta, ele não a inicia nem a classifica autonomamente: explica escopo, motivo, controles mantidos e documentação dispensada, e pede autorização explícita do usuário para aquela mudança. Fora da exceção autorizada da regra 9, a classificação, as validações e os agentes acionados ficam registrados na task e no resumo decisório mínimo de `docs/continuidade.md`.
 
 ### Exceção enxuta: ajuste básico ou urgente
 
@@ -134,7 +135,7 @@ Pela regra 9, ajuste básico e/ou urgente pode dispensar **task e documentação
 
 - A exceção não dispensa branch nova, PR, revisão independente, validação proporcional, segurança nem obrigação legal, regulatória ou contratual aplicável.
 - A LLM ou o orquestrador apenas identifica a possibilidade e pede autorização; não escolhe, classifica nem inicia essa exceção por conta própria.
-- Ela não se aplica a nenhum gatilho da regra 3. Se houver gatilho documental, a nota Obsidian continua obrigatória no mesmo turno; se houver dúvida, não usar a exceção.
+- Ela não se aplica a nenhum gatilho da regra 3. Se houver gatilho documental, a pendência documental imediata e a sincronização no prazo continuam obrigatórias; se houver dúvida, não usar a exceção.
 - O PR registra objetivamente o motivo de urgência ou simplicidade, escopo, validações executadas e a justificativa de não haver gatilho documental. Esse registro não substitui documento obrigatório.
 - Neo é acionado para qualquer superfície de segurança; se houver incerteza, acesso a arquivo, hook, permissão, segredo, dependência ou configuração sensível, a exceção para e retorna à via rápida ou ao fluxo completo.
 - Qualquer conflito material com outra regra de ferro segue a regra 10: pausar e pedir decisão do usuário com trade-offs, alternativas, impacto e regra excepcional.
@@ -179,7 +180,7 @@ Não iniciar feature sem PRD e task correspondentes. Mudança estrutural também
 
 ### Resumo decisório mínimo
 
-Toda task e toda atualização semântica de `docs/plan.md` ou `docs/state.md` registra, em formato curto e factual:
+Toda task e toda atualização semântica de `docs/continuidade.md` registra, em formato curto e factual:
 
 - **Objetivo:** resultado e limite da mudança.
 - **Decisão:** classificação da mudança, caminho escolhido e decisões aplicadas ou pendentes.
@@ -221,15 +222,17 @@ Yoda, Ted, Neo e Jarvis mantêm pareceres independentes dentro do próprio escop
 - DDD, SOLID e os princípios de qualidade definidos por ADR orientam a arquitetura; os gates mecânicos são escolhidos depois que a stack for decidida.
 - GitHub hospeda a colaboração e pode executar automações versionadas quando a aplicação definir os workflows; nenhum workflow ou integração externa é presumido pelo template.
 
-A decisão estrutural inicial está na [ADR 001](adrs/adr-001-template-agnostico-de-tecnologia.md). Decisões adicionais só existem quando uma aplicação consumidora as registrar; este resumo não substitui esses documentos.
+As decisões vigentes desta seção são explícitas neste documento. Decisões adicionais só existem quando uma aplicação consumidora as registrar; este resumo não substitui esses documentos.
 
-**Cópia canônica e espelho.** A **base Obsidian é a cópia canônica** de ADR, PRD, HLD e das notas de responsabilidade — é o que a regra de ferro 3 determina. O repositório guarda um **espelho de leitura** em [`docs/adrs/`](adrs/), [`docs/hlds/`](hlds/), [`docs/prds/`](prds/) e [`docs/roles/`](roles/), para que um agente trabalhando no código leia a decisão sem depender de acesso ao vault. As duas cópias se mantêm em sincronia por três regras:
+**Cópia canônica e espelho.** A **base Obsidian é a cópia canônica** de ADR, PRD, HLD, FDD e das notas de responsabilidade — é o que a regra de ferro 3 determina. O repositório guarda um **espelho de leitura** em [`docs/adrs/`](adrs/), [`docs/hlds/`](hlds/), [`docs/fdds/`](fdds/), [`docs/prds/`](prds/) e [`docs/roles/`](roles/), para que um agente trabalhando no código leia a decisão sem depender de acesso ao vault. A sincronização segue três regras:
 
-1. **A base primeiro.** Toda criação ou edição desses documentos é escrita na base e espelhada no repositório **no mesmo turno**, nunca só de um lado.
-2. **A base vence.** Em divergência entre as cópias, vale a base; o espelho é regenerado a partir dela, não reconciliado à mão.
+1. **Pendência rastreada primeiro.** Criação, edição ou remoção é registrada imediatamente em `docs/continuidade.md`, com origem, destino, responsável e prazo máximo de 24 horas; pedido do usuário antecipa a sincronização.
+2. **A base vence após conferência.** Em divergência confirmada entre as cópias, vale a base; o espelho é regenerado a partir dela, não reconciliado à mão. Antes da conferência, o registro operacional temporário não pode alegar que a base foi atualizada.
 3. **A única diferença permitida é mecânica.** O espelho preserva integralmente o corpo e o frontmatter da nota e converte apenas os wikilinks: `[[nota]]` vira um link Markdown para o caminho relativo da nota, e `[[nota|Rótulo]]` preserva o rótulo nesse link, porque wikilink não resolve fora do Obsidian. O frontmatter é mantido porque carrega informação de decisão — `status` de uma ADR, sobretudo — e porque manter as cópias byte a byte iguais fora dos links torna a divergência detectável por `diff`.
 
 A relação é inversa à das skills: skill tem definição canônica no repositório e registro na base; documento de decisão tem o canônico na base e espelho no repositório.
+
+Pendência dentro do prazo é aceitável na auditoria quando estiver completa e rastreável. Pendência vencida bloqueia a conclusão da mudança e o início de trabalho dependente. Não existe scheduler nem automação externa para substituir essa responsabilidade.
 
 **DDD.** O domínio é o núcleo: regras de negócio ficam isoladas de transporte, persistência e detalhes de framework. Infraestrutura depende do domínio, nunca o contrário. Contextos se comunicam por contratos explícitos, ids ou eventos, nunca importando silenciosamente entidades internas de outro contexto.
 
@@ -258,21 +261,17 @@ Ambos são condição de merge. Publicação e deploy continuam sujeitos à regr
 
 | Arquivo | Ferramenta | Aponta para | Conteúdo permitido |
 |---|---|---|---|
-| `CLAUDE.md` | Claude Code | este documento | Ponteiro + regra de idioma |
-| `AGENTS.md` | Codex e demais agentes | este documento | Ponteiro + regra de idioma |
+| `CLAUDE.md` | Claude Code | `docs/recursos-template.md`, depois `docs/rules.md` se habilitado | Ponteiro de onboarding + regra de idioma |
+| `AGENTS.md` | Codex e demais agentes | `docs/recursos-template.md`, depois `docs/rules.md` se habilitado | Ponteiro de onboarding + regra de idioma |
 | `.claude/skills/<skill>/SKILL.md` | Claude Code | `docs/skills/<skill>.md` | Frontmatter de descoberta + ponteiro |
 | `.claude/agents/<agente>.md` | Claude Code | `docs/agentes/<agente>.md` | Frontmatter de despacho (`model`, `effort`, `tools`) + ponteiro |
-| `.claude/hooks/sessao-orquestrador.sh` | Claude Code | `docs/agentes/homem-de-ferro.md` | Injeta o papel no `SessionStart` |
-| `.claude/hooks/guarda-orquestrador.sh` | Claude Code | `docs/agentes/homem-de-ferro.md` | Nega escrita fora de subagente (`PreToolUse`) |
-| `.claude/hooks/sincronizar-continuidade.sh` | Claude Code | convenção de continuidade + `docs/plan.md`/`docs/state.md` | Atualiza somente seções geradas após mutação (`PostToolUse`) |
-| `.codex/hooks.json` | Codex | este documento + `docs/agentes/homem-de-ferro.md` + convenção de continuidade | Declara os adaptadores de sessão, guarda preventiva e continuidade |
-| `.codex/hooks/sessao-orquestrador.sh` | Codex | `docs/agentes/homem-de-ferro.md` | Injeta o papel no `SessionStart` |
-| `.codex/hooks/guarda-orquestrador.sh` | Codex | `docs/agentes/homem-de-ferro.md` | Alerta antes de mutação; o payload não distingue sessão principal de subagente |
-| `.codex/hooks/sincronizar-continuidade.sh` | Codex | convenção de continuidade + `docs/plan.md`/`docs/state.md` | Encaminha a sincronização mecânica após mutação (`PostToolUse`) |
+| `.claude/hooks/onboarding-recursos-template.sh` | Claude Code | `docs/recursos-template.md` | Único hook registrado: injeta a pergunta de opt-in no `SessionStart` |
+| `.codex/hooks/onboarding-recursos-template.sh` | Codex | `docs/recursos-template.md` | Único hook registrado: injeta a pergunta de opt-in no `SessionStart` |
+| Hooks de sessão, guarda e continuidade restantes | Claude Code e Codex | suas definições canônicas | Versionados e validados, mas disponíveis e inativos até configuração futura autorizada pelo usuário |
 
 Definição canônica de skill: `docs/skills/`. Fica no repositório, e não na base Obsidian, para que um agente trabalhando no código consiga lê-la sem depender de acesso à base. A base documenta que a skill existe (gatilho da regra 3); o repositório guarda a definição executável.
 
-Ao adicionar suporte a uma nova ferramenta, cria-se **mais um adaptador ponteiro** — nunca uma cópia do conteúdo. A regra de idioma (regra 2) é repetida inline nos adaptadores de propósito: ela precisa valer já na primeira resposta, antes mesmo deste documento ser lido.
+Ao adicionar suporte a uma nova ferramenta, cria-se **mais um adaptador ponteiro** — nunca uma cópia do conteúdo. A regra de idioma (regra 2) é repetida inline nos adaptadores de propósito. Configurar automação de ciclo de vida exige autorização explícita do usuário; a escolha conversacional não reconfigura hooks por si só.
 
 ## Catálogo de skills
 
@@ -305,17 +304,16 @@ Playbooks são consulta seletiva e não substituem ADR, HLD, FDD ou skill prescr
 
 | Arquivo | Gatilho |
 |---|---|
-| `docs/playbooks/backend-e-padroes-de-sistema.md` | Idempotência, fila, eventos, resiliência, cache, lote e erros |
-| `docs/playbooks/banco-de-dados-e-sql.md` | Queries, índices, locks, paginação, importação e reconciliação |
-| `docs/playbooks/seguranca.md` | Autorização, injeção, autenticação, upload, PII, supply chain e LGPD |
+| `docs/playbooks/playbook-backend.md` | Padrões de backend: idempotência, fila, fronteiras de contexto, resiliência, cache, lote, erros e anti-overengineering |
+| `docs/playbooks/playbook-database.md` | Problemas de banco relacional e SQL: queries, índices, locks, pool, concorrência, isolamento, paginação e diagnóstico |
+| `docs/playbooks/playbook-security.md` | Riscos de segurança: identificação, correção e checklist para injeção, autenticação, autorização, segredos, supply chain e LGPD |
 
 ## Arquivos permanentes do projeto
 
 | Arquivo | Papel |
 |---|---|
 | `docs/rules.md` | Contrato canônico de governança, roles, decisões e catálogos |
-| `docs/plan.md` | Plano operacional da task ativa; checklist só muda por decisão do agente |
-| `docs/state.md` | Estado observado, mutações de arquivos e trabalho ainda pendente |
+| `docs/continuidade.md` | Identificação, plano, estado observado, decisões, histórico, pendências Obsidian e única região gerada |
 | `docs/lib.md` | Inventário de todas as dependências, com nome, versões, finalidade e status |
 | `docs/roadmap.md` | Direção, fases e prioridades do produto |
 | `docs/infraestrutura.md` | Estado e operação da infraestrutura |
@@ -324,6 +322,7 @@ Playbooks são consulta seletiva e não substituem ADR, HLD, FDD ou skill prescr
 | `docs/playbooks/` | Referências diagnósticas e decisórias por gatilho |
 | `docs/adrs/` | Espelho das ADRs; cópia canônica na base Obsidian |
 | `docs/hlds/` | Espelho do HLD; cópia canônica na base Obsidian |
+| `docs/fdds/` | Espelho dos FDDs; cópia canônica na base Obsidian |
 | `docs/prds/` | Espelho dos PRDs; cópia canônica na base Obsidian |
 | `docs/roles/` | Espelho das três responsabilidades da regra 4; cópia canônica na base Obsidian |
 | `.env.example` | Contrato de configuração sem segredos; valores reais ficam fora do repositório |

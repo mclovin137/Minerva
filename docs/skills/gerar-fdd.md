@@ -8,7 +8,7 @@ Conduzir uma entrevista estruturada, uma pergunta por vez, e gerar um FDD técni
 
 O dono do FDD é **quem implementa**. O FDD precisa ser submetido ao **Yoda** para revisão e aprovação antes de virar código. O autor não revisa o próprio FDD. Se uma feature exigir divergência estrutural do HLD, parar e encaminhar a decisão para ADR antes do código. Não inventar regra de negócio: registrar `❓ LACUNA` e devolver para decisão.
 
-Antes de iniciar, ler `docs/rules.md`, `docs/plan.md`, `docs/state.md`, `docs/lib.md` e o PRD, HLD e ADRs relacionados. Aplicar as tecnologias e fronteiras já aceitas sem inventar versão, configuração, topologia ou regra mantida como `TBD` ou `❓ LACUNA`.
+Antes de iniciar, ler `docs/rules.md`, `docs/continuidade.md`, `docs/lib.md` e o PRD, HLD e ADRs relacionados. Aplicar as tecnologias e fronteiras já aceitas sem inventar versão, configuração, topologia ou regra mantida como `TBD` ou `❓ LACUNA`.
 
 ## Condução da entrevista
 
