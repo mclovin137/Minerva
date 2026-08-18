@@ -34,7 +34,7 @@ Não negociáveis. Qualquer proposta que viole uma delas deve ser recusada e sub
 8. **Dois pipelines de CI/CD:** um de review e um de execução dos casos de teste. Ver seção *CI/CD*.
 9. **Exceção enxuta para ajuste básico ou urgente.** Só pode dispensar task e documentação formal com autorização explícita do usuário para aquela mudança e nas condições da seção *Fluxo de trabalho → Exceção enxuta*. Branch nova, PR, revisão independente e segurança continuam obrigatórios.
 10. **Conflito material entre regras exige decisão do usuário.** Quando regras de ferro — ou seus efeitos — colidirem materialmente, o agente para e apresenta trade-offs, alternativas, impacto e a regra excepcional ao usuário; nunca escolhe silenciosamente.
-11. **Recursos do template exigem opt-in do usuário.** Documentos, agentes, skills e hooks são opcionais na sessão e só são usados após escolha explícita do usuário. A única exceção é o onboarding mínimo de [`docs/recursos-template.md`](recursos-template.md), que pergunta antes de qualquer uso; a escolha vale para a sessão, aceita seleção parcial e pode mudar a qualquer momento. Dependências são explicadas antes da ativação, e nada é habilitado silenciosamente.
+11. **Documentos e skills exigem opt-in item a item.** Somente documentos e skills são selecionáveis na sessão; o onboarding mínimo de [`docs/recursos-template.md`](recursos-template.md) apresenta seus itens antes de qualquer uso. Agentes seguem a responsabilidade e os gatilhos canônicos; hooks seguem a configuração versionada e o suporte da ferramenta, sem escolha conversacional. A escolha de documentos e skills vale para a sessão, aceita seleção parcial e pode mudar a qualquer momento. Dependências são explicadas antes da ativação, e nada é habilitado silenciosamente.
 ---
 
 ## Escopo da regra 5
@@ -55,7 +55,7 @@ Toda atividade pertence a exatamente uma das três responsabilidades. A separaç
 
 Os agentes concretos estão definidos em `docs/agentes/`: **Homem de Ferro** (orquestrar), **Yoda** (arquitetura), **Severino** (todo o código da aplicação), **Ted Mosby** (QA), **Neo** (segurança), **Jarvis** (SRE) e **c4-diagram-generator** (diagramas C4).
 
-**Orquestrador — quando habilitado pelo usuário, é a sessão principal (Homem de Ferro)**
+**Orquestrador — quando o fluxo da sessão o exigir, é a sessão principal (Homem de Ferro)**
 - Interpreta a demanda, localiza a posição dela no fluxo (ver *Fluxo de trabalho*) e delega ao agente certo.
 - Mantém estado: o que está em andamento, o que está bloqueado, o que aguarda auditoria.
 - **Não altera, não cria e não apaga nenhum arquivo** — inclusive por shell (`>`, `rm`, `mv`, `sed -i`, mutações de git). Toda escrita acontece dentro de um agente delegado; não existe mudança pequena demais para delegar.
@@ -71,7 +71,7 @@ Os agentes concretos estão definidos em `docs/agentes/`: **Homem de Ferro** (or
 - Abre o PR e responde ao review.
 - **Não aprova nem faz merge do próprio PR.**
 
-Definições de agentes, roles e skills são markdown neutro, versionado no repositório, consumível por qualquer ferramenta (regra 1). Seu uso exige o opt-in da regra 11. Toda criação/edição/remoção de agente, role ou skill exige atualização do Obsidian quando documentos de governança estiverem habilitados (regra 3).
+Definições de agentes, roles e skills são markdown neutro, versionado no repositório, consumível por qualquer ferramenta (regra 1). Skills exigem o opt-in da regra 11; agentes são acionados pelos gatilhos e responsabilidades desta regra. Toda criação/edição/remoção de agente, role ou skill exige atualização do Obsidian quando documentos de governança estiverem habilitados (regra 3).
 
 ### Catálogo de agentes
 
@@ -117,11 +117,141 @@ Gatilhos obrigatórios (criação, edição **ou** remoção):
 
 Decisões estruturais e escolhas de tecnologia entram como **ADR** — inclusive as pendências listadas no fim deste documento.
 
-**ADR, PRD, HLD, FDD e as notas de responsabilidade têm cópia canônica na base e espelho no repositório** (`docs/adrs/`, `docs/hlds/`, `docs/fdds/`, `docs/prds/`, `docs/roles/`). O espelho e a pendência seguem o contrato em *Arquitetura e testes → Cópia canônica e espelho*. Pendência dentro do prazo é rastreável; pendência vencida bloqueia conclusão e trabalho dependente.
+**ADR, PRD, HLD, FDD, LLD, RFC e as notas de responsabilidade têm cópia canônica na base e espelho no repositório** (`docs/adrs/`, `docs/prds/`, `docs/hlds/`, `docs/fdds/`, `docs/llds/`, `docs/rfcs/`, `docs/roles/`). O espelho e a pendência seguem o contrato em *Arquitetura e testes → Cópia canônica e espelho*. Pendência dentro do prazo é rastreável; pendência vencida bloqueia conclusão e trabalho dependente.
 
 ---
 
 ## Fluxo de trabalho
+
+### Taxonomia de documentação
+
+O sistema conhece categorias de documentos além dos artefatos usuais de desenvolvimento. A
+taxonomia orienta descoberta, criação e revisão: não autoriza gerar documento por catálogo, nem
+rebaixa contratos já exigidos por estas regras. Para cada mudança, cria-se somente o artefato que
+responde uma pergunta real, tem dono e permanecerá útil depois da entrega.
+
+| Categoria | Relevantes no fluxo de desenvolvimento | Contextuais ou emergentes | Legados ou de uso restrito |
+|---|---|---|---|
+| Produto | PRD | épico e user story, conforme a gestão de produto | FRD, quando houver acervo ou contrato herdado a preservar |
+| Design e arquitetura | HLD, FDD, ADR e modelo C4 | RFC, LLD, AI Design Doc e Prompt Spec | TRD e LLD no formato RUP, salvo migração ou obrigação externa |
+| Conhecimento e referência | engineering guidelines, playbooks e Security Design Doc | documento de avaliação de IA | plano e caso de teste formais isolados, salvo necessidade de auditoria ou contrato externo |
+| Operação e infraestrutura | runbook, playbook e documentação de incidente | observabilidade, capacidade e telemetria | Design Doc de infraestrutura e CI/CD quando não forem escopo da task ou responsabilidade do time |
+
+**Produto.** PRD é a referência de problema, valor e critério de aceite. Épicos e user stories
+podem complementar a gestão de produto, mas não substituem critérios verificáveis. FRD é tratado
+como nomenclatura ou legado: se existir, preserva-se a rastreabilidade e mapeia-se sua função para
+o encadeamento vigente, sem criar um paralelo ritualístico.
+
+**Design e arquitetura.** HLD, FDD, ADR e C4 são os artefatos centrais para organizar a solução.
+RFC e LLD seguem o critério proporcional desta regra. AI Design Doc e Prompt Spec são usados quando
+um comportamento, avaliação, contexto, limitação ou operação de IA fizer parte do sistema; devem
+declarar objetivo, entradas, saídas, limites, avaliação e revisão humana. Não são exigidos por um
+uso incidental de ferramenta de IA no desenvolvimento.
+
+**Conhecimento e referência.** Engineering guidelines, skills e playbooks preservam práticas
+reutilizáveis; Security Design Doc é criado quando o risco de segurança precisar de desenho próprio
+além de PRD, HLD, FDD e parecer do Neo. Estratégia, casos e evidências de teste continuam
+obrigatórios conforme as regras de QA; o que é contextual é o documento formal separado de plano
+ou caso de teste. Documento de avaliação de IA descreve métricas, conjunto de avaliação, critérios
+de aprovação, riscos e regressões quando a aplicação usar IA.
+
+**Operação e infraestrutura.** Runbooks e playbooks orientam operação, incidente e recuperação.
+Documentos de observabilidade, capacidade, infraestrutura e CI/CD são criados quando a mudança
+tocar esses domínios ou quando Jarvis os exigir; não são dispensados por serem secundários à
+codificação. Sua responsabilidade depende da task: Severino implementa pipeline-as-code atribuído,
+e Jarvis define operação, garantias de liberação e pós-deploy.
+
+**Uso prático.** Antes de criar documento, classifique sua categoria, declare a pergunta que ele
+responde, conecte-o aos artefatos anteriores e defina o dono e o revisor. Ao revisar, confirme que
+o conteúdo continua atual, que seus links são recíprocos quando houver decisão ou impacto
+estrutural, e que não duplica outro artefato. Documento errado, contraditório ou obsoleto é risco
+operacional para pessoas e IA: corrigir, substituir ou marcar explicitamente seu estado é
+obrigatório.
+
+### Encadeamento entre documentos
+
+Documentos de produto, design e arquitetura formam uma cadeia de abstração: começam no problema
+de produto, aproximam-se progressivamente da implementação e registram decisões. Cada artefato
+responde uma pergunta própria; eles se complementam, sem competir entre si. A escolha é
+proporcional ao porte da mudança, ao risco técnico e à necessidade de alinhamento — não é ritual.
+
+| Documento | Pergunta principal | Nível de detalhe | Momento de uso |
+|---|---|---|---|
+| PRD | Qual problema de produto deve ser resolvido e qual valor se espera? | baixo detalhe técnico | antes do desenho técnico |
+| HLD | Como a solução se organiza em alto nível? | alto nível técnico | após clareza de produto e antes do detalhamento estrutural |
+| FDD / FRD | Como uma feature ou módulo será implementado? | detalhe intermediário | quando o escopo da feature estiver definido |
+| LLD | Como a implementação concreta será estruturada? | alto detalhe técnico | próximo da implementação, quando reduzir ambiguidade for necessário |
+| RFC | Quais alternativas ainda estão em discussão? | variável, orientado ao debate | antes de decisão técnica relevante |
+| ADR | Qual decisão arquitetural foi tomada e por quê? | registro objetivo da decisão | depois da decisão |
+
+**PRD** transforma a necessidade em problema, valor esperado, restrições e critérios de aceite.
+**HLD** transforma esse contexto em visão técnica compartilhada de componentes,
+responsabilidades, integrações e limites, sem entrar em detalhes finos. Em mudança pequena ou
+isolada, o HLD pode ser condensado ou absorvido pelo FDD; quando a mudança cruza módulos ou exige
+coordenação ampla, ele antecede o detalhamento.
+
+**FDD** — também chamado de *Feature Design Doc*; **FRD** é nomenclatura legada de função
+semelhante — detalha o escopo técnico, fluxo principal, impactos e escolhas de uma feature. Ele
+fica entre o HLD e o LLD: pode bastar para feature isolada, mas não substitui o HLD quando houver
+arquitetura mais ampla. **LLD** desce ao nível de contratos, pontos expostos, campos, padrões e
+detalhes executáveis; só é criado quando esse grau de precisão reduzir ambiguidade antes do código.
+
+**RFC** é deliberativa: reúne proposta, objeções e alternativas enquanto a decisão ainda está
+aberta. **ADR** é memória técnica: registra a decisão vencedora, seu contexto e justificativa,
+podendo ser substituído ou inativado quando deixar de valer. Nem toda decisão exige RFC e ADR, mas
+uma decisão estrutural ou tecnológica tomada deve seguir o contrato de ADR desta regra.
+
+No mesmo problema, a cadeia típica é: PRD define objetivo e restrições; HLD organiza a solução;
+FDD detalha a feature; LLD fixa detalhes executáveis quando necessário; RFC antecede uma escolha
+ainda disputada; ADR registra a escolha tomada. Ao criar qualquer desses documentos, o autor
+declara qual pergunta ele responde, quais artefatos anteriores consultou e por que os níveis não
+usados não são necessários.
+
+### ADR — memória técnica, elegibilidade e governança
+
+Um **Architecture Decision Record** registra uma decisão arquitetural relevante e, principalmente,
+o porquê de ela ter sido tomada: contexto, restrições, alternativas, trade-offs e consequências.
+O código mostra o que foi implementado, mas não preserva de forma confiável essas pressões. O ADR
+é memória técnica explícita para pessoas e agentes de IA; reduz tradição oral, inferência frágil e
+reabertura de decisões sem o contexto que as justificou.
+
+**Uma ADR por decisão.** O documento não descreve o sistema inteiro nem mistura escolhas
+independentes. Usa identificador estável e nomenclatura previsível para permitir ordenar, citar e
+relacionar decisões. A escrita é objetiva e técnica: contexto suficiente para sustentar a decisão,
+sem transformar o ADR em narrativa histórica extensa.
+
+**Uma decisão exige ADR** quando tiver impacto arquitetural duradouro ou difícil de reverter, afetar
+múltiplos módulos, equipes ou contratos públicos, ou quando esquecer seu motivo prejudicar
+segurança, custo, desempenho, interoperabilidade, operação ou evolução. Exemplos incluem modelo
+de modularização, fronteira entre componentes, persistência, autenticação e autorização,
+observabilidade, deploy, estratégia de resiliência, versionamento de contrato público, dependência
+crítica e lock-in técnico ou operacional.
+
+**Não criar ADR automaticamente** para convenção local já institucionalizada, regra de domínio que
+evolui dentro de uma feature, organização de arquivos sem efeito arquitetural, padrão de
+implementação sem contrato público ou parâmetro de ajuste frequente. Esses itens pertencem a
+README, HLD, FDD ou LLD, salvo quando representarem ruptura de paradigma, restrição sistêmica ou
+decisão cuja reversão tenha impacto amplo. Na zona cinzenta, perguntar: “se o porquê se perder,
+isso prejudicará a evolução do sistema?”
+
+**Ciclo de vida e revisão.** ADR passa pelo mesmo fluxo governado de código: branch, pull request,
+comentários, revisão independente, evidências e histórico. A decisão antiga não é reescrita para
+parecer atual: uma decisão nova cria ADR novo, aponta a relação e marca o anterior como
+`superseded` ou inativo, conforme o caso. Documento contraditório, incompleto ou obsoleto gera
+falsa confiança e deve ser corrigido ou explicitamente marcado; nunca é tratado como contexto
+vigente por silêncio.
+
+**Encadeamento e links.** Todo ADR aponta para os PRDs, RFCs, HLDs, FDDs, LLDs e ADRs anteriores
+que fundamentam a decisão; os documentos impactados apontam de volta para o ADR. As relações são
+explícitas e usam, quando aplicável, `dependsOn`, `relatesTo` e `supersedes`. Assim, o acervo deixa
+de ser uma pasta de arquivos e passa a ser um grafo histórico navegável de decisões, antecedentes e
+consequências.
+
+**Linkagem assistida, revisão humana obrigatória.** Agentes podem propor relações a partir de
+evidências documentadas e do histórico, mas não inventam vínculos nem mudam estado de ADR por
+inferência. O revisor confirma cada ligação e seu sentido antes de registrá-la. Essa disciplina
+permite que IA recupere intenção arquitetural a partir de contexto declarado, em vez de adivinhar
+motivos pelo código.
 
 Antes de qualquer delegação, o Homem de Ferro classifica a mudança como **via rápida** ou **fluxo completo**. Se identificar possível exceção enxuta, ele não a inicia nem a classifica autonomamente: explica escopo, motivo, controles mantidos e documentação dispensada, e pede autorização explícita do usuário para aquela mudança. Fora da exceção autorizada da regra 9, a classificação, as validações e os agentes acionados ficam registrados na task e no resumo decisório mínimo de `docs/continuidade.md`.
 
@@ -157,7 +287,7 @@ Usar somente para mudança documental, governança, adaptador de ferramenta, aut
 ### Fluxo completo: feature ou mudança estrutural
 
 ```
-roadmap → épico → PRD → HLD → FDD → task → PR → auditoria → merge → deploy
+roadmap → épico → PRD → RFC (quando houver deliberação) → HLD (quando estrutural) → FDD → LLD (quando reduzir ambiguidade) → task → PR → auditoria → merge → deploy
 ```
 
 - **Roadmap:** direção do produto; origem de todo épico.
@@ -165,6 +295,8 @@ roadmap → épico → PRD → HLD → FDD → task → PR → auditoria → mer
 - **PRD:** o quê e o porquê, com critérios de aceite verificáveis.
 - **HLD:** como o sistema se organiza — partes, fronteiras, contratos entre elas. É obrigatório quando a mudança for estrutural. **Dono: Yoda.**
 - **FDD:** como cada feature funciona por dentro. É obrigatório quando houver comportamento, regra de negócio, integração, contrato público ou risco relevante. **Dono: quem implementa; revisor: Yoda.** O autor não revisa o próprio FDD (regra 4).
+- **LLD:** contratos e detalhes executáveis próximos da implementação. É opcional; usar quando o FDD não reduzir ambiguidade suficiente para implementar e testar com segurança. **Dono: quem implementa; revisor: Yoda quando tocar arquitetura, fronteira ou contrato.**
+- **RFC:** proposta e alternativas antes de uma decisão relevante ainda em aberto. É opcional; quando a decisão for tomada, seu registro segue a regra de ADR aplicável.
 - **Task:** unidade executável derivada do PRD e do FDD, com escopo fechado.
 - **Numeração de tasks:** a primeira task formal do ciclo atual é `T-001`; as seguintes avançam sequencialmente a partir dela. Não inferir a numeração por notas, arquivos ou registros históricos.
 - **PR:** entrega da task, com testes e evidências anexadas.
@@ -172,9 +304,9 @@ roadmap → épico → PRD → HLD → FDD → task → PR → auditoria → mer
 - **Merge:** só após auditoria aprovada e pipelines verdes.
 - **Publicação e deploy:** seguem o workflow histórico restaurado; custo financeiro zero e os gates continuam obrigatórios.
 
-**ADR é transversal:** não ocupa posição na cadeia, porque uma decisão estrutural pode nascer em qualquer ponto dela — no PRD, no HLD, no FDD ou diante de um problema encontrado no código.
+**ADR é transversal:** não ocupa posição rígida na cadeia, porque uma decisão estrutural pode nascer em qualquer ponto dela — no PRD, RFC, HLD, FDD, LLD ou diante de um problema encontrado no código.
 
-Ao validar uma implementação, lê-se a cadeia **antes** do código: PRD, HLD, FDD e só então o diff. Ler o código primeiro faz avaliar se ele é coerente consigo mesmo, em vez de coerente com o que foi decidido.
+Ao validar uma implementação, lê-se a cadeia **antes** do código: PRD, RFC aplicável, HLD, FDD, LLD aplicável e só então o diff. Ler o código primeiro faz avaliar se ele é coerente consigo mesmo, em vez de coerente com o que foi decidido.
 
 Não iniciar feature sem PRD e task correspondentes. Mudança estrutural também exige HLD; comportamento, regra de negócio, integração, contrato público ou risco relevante também exigem FDD aprovado. A exceção é a via rápida, limitada pelos critérios desta seção.
 
@@ -224,7 +356,7 @@ Yoda, Ted, Neo e Jarvis mantêm pareceres independentes dentro do próprio escop
 
 As decisões vigentes desta seção são explícitas neste documento. Decisões adicionais só existem quando uma aplicação consumidora as registrar; este resumo não substitui esses documentos.
 
-**Cópia canônica e espelho.** A **base Obsidian é a cópia canônica** de ADR, PRD, HLD, FDD e das notas de responsabilidade — é o que a regra de ferro 3 determina. O repositório guarda um **espelho de leitura** em [`docs/adrs/`](adrs/), [`docs/hlds/`](hlds/), [`docs/fdds/`](fdds/), [`docs/prds/`](prds/) e [`docs/roles/`](roles/), para que um agente trabalhando no código leia a decisão sem depender de acesso ao vault. A sincronização segue três regras:
+**Cópia canônica e espelho.** A **base Obsidian é a cópia canônica** de ADR, PRD, HLD, FDD, LLD, RFC e das notas de responsabilidade — é o que a regra de ferro 3 determina. O repositório guarda um **espelho de leitura** em [`docs/adrs/`](adrs/), [`docs/prds/`](prds/), [`docs/hlds/`](hlds/), [`docs/fdds/`](fdds/), `docs/llds/`, `docs/rfcs/` e [`docs/roles/`](roles/), para que um agente trabalhando no código leia a decisão sem depender de acesso ao vault. A sincronização segue três regras:
 
 1. **Pendência rastreada primeiro.** Criação, edição ou remoção é registrada imediatamente em `docs/continuidade.md`, com origem, destino, responsável e prazo máximo de 24 horas; pedido do usuário antecipa a sincronização.
 2. **A base vence após conferência.** Em divergência confirmada entre as cópias, vale a base; o espelho é regenerado a partir dela, não reconciliado à mão. Antes da conferência, o registro operacional temporário não pode alegar que a base foi atualizada.
@@ -321,8 +453,10 @@ Playbooks são consulta seletiva e não substituem ADR, HLD, FDD ou skill prescr
 | `docs/skills/` | Definições canônicas das skills |
 | `docs/playbooks/` | Referências diagnósticas e decisórias por gatilho |
 | `docs/adrs/` | Espelho das ADRs; cópia canônica na base Obsidian |
+| `docs/rfcs/` | Espelho das RFCs; cópia canônica na base Obsidian |
 | `docs/hlds/` | Espelho do HLD; cópia canônica na base Obsidian |
 | `docs/fdds/` | Espelho dos FDDs; cópia canônica na base Obsidian |
+| `docs/llds/` | Espelho dos LLDs; cópia canônica na base Obsidian |
 | `docs/prds/` | Espelho dos PRDs; cópia canônica na base Obsidian |
 | `docs/roles/` | Espelho das três responsabilidades da regra 4; cópia canônica na base Obsidian |
 | `.env.example` | Contrato de configuração sem segredos; valores reais ficam fora do repositório |

@@ -37,6 +37,18 @@ Onde houver código da aplicação, Severino atua: implementação de tasks, aju
 
 No fluxo normal, há duas etapas. Para detalhar a feature, recebe PRD e HLD, escreve o FDD e o submete ao Yoda. Para começar o código, recebe o FDD aprovado e uma task nomeada, e então executa a arquitetura definida no HLD.
 
+## Consulta aos playbooks
+
+Antes de escrever o FDD ou implementar, Severino consulta o índice de `docs/playbooks/` e lê as
+seções disparadas pela task. Para back-end, migration, integração, processamento assíncrono,
+cache, concorrência ou endpoint, a consulta a `playbook-backend.md` é obrigatória; quando houver
+schema, SQL ou persistência, também consulta `playbook-database.md`; quando a mudança expuser
+superfície de segurança, consulta `playbook-security.md` e incorpora as restrições do parecer do Neo.
+
+Severino registra no FDD, na task ou no PR as seções aplicadas e como elas se traduzem em
+implementação e testes. Playbook é insumo de boas práticas, não autorização para ampliar escopo
+nem para substituir decisões prescritivas de PRD, HLD, FDD aprovado ou ADR.
+
 ## Faz
 
 - Implementa tasks e ajusta código existente, incluindo back-end e front-end, conforme o FDD aprovado, a task e as camadas definidas pelo Yoda.
@@ -84,7 +96,7 @@ Emergência não autoriza ação, regularização documental posterior, autoapro
 
 ## Entradas e saídas
 
-**Entradas:** para escrever o FDD, PRD e HLD; no fluxo completo, task nomeada, PRD de origem, FDD aprovado quando aplicável, HLD/ADRs vigentes e matriz do Ted quando acionado; na via rápida, task curta, superfície permitida, validações e revisor independente. Em incidente, autorização explícita da regra 9 ou decisão explícita do usuário pela regra 10, além do contexto técnico disponível.
+**Entradas:** para escrever o FDD, PRD, HLD e seções aplicáveis dos playbooks; no fluxo completo, task nomeada, PRD de origem, FDD aprovado quando aplicável, HLD/ADRs vigentes e matriz do Ted quando acionado; na via rápida, task curta, superfície permitida, validações e revisor independente. Em incidente, autorização explícita da regra 9 ou decisão explícita do usuário pela regra 10, além do contexto técnico disponível.
 
 **Saídas:** código, testes, evidências, migrations reversíveis quando aplicável, pipeline-as-code quando atribuído, arquivos `.md` correspondentes, notas da base atualizadas e PR aberto.
 

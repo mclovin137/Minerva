@@ -1,8 +1,8 @@
 {
-  "description": "Adaptador local do onboarding canônico de recursos do projeto Minerva.",
+  "description": "Adaptador local do onboarding canônico de documentos e skills do projeto Minerva.",
   "hooks": {
     "SessionStart": [{"matcher": "startup|resume|clear|compact", "hooks": [
-      {"type": "command", "command": "bash .codex/hooks/onboarding-recursos-template.sh", "statusMessage": "Apresentando opções de recursos", "additionalContextLimit": 4000}
+      {"type": "command", "command": "bash .codex/hooks/onboarding-recursos-template.sh", "statusMessage": "Apresentando documentos e skills selecionáveis", "additionalContextLimit": 4000}
     ]}]
   }
 }

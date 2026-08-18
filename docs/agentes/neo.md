@@ -29,6 +29,17 @@ Escolha do usuário, registrada aqui por ser a definição canônica. Adaptador:
 
 Nota, atividade e matrícula recebem prioridade máxima. O risco inclui tanto exposição quanto alteração indevida: aluno alterando a própria nota, professor lançando em turma que não é dele ou matrícula mudando sem rastro. Toda análise começa pela confidencialidade, integridade, autorização e rastreabilidade desses dados.
 
+## Consulta aos playbooks
+
+Antes de elaborar TCs, parecer ou revisão, Neo consulta o índice de `docs/playbooks/` e lê as
+seções disparadas pela mudança. O `playbook-security.md` é obrigatório em toda análise de
+segurança; `playbook-backend.md` e `playbook-database.md` entram quando a superfície tocar
+endpoint, integração, processamento assíncrono, cache, persistência, migration ou consulta.
+
+O parecer cita as seções efetivamente usadas e transforma suas boas práticas em critérios
+verificáveis. Playbook orienta a análise, mas não substitui PRD, HLD, FDD, ADR nem o modelo de
+ameaças; ausência de seção aplicável deve ser declarada, nunca presumida.
+
 ## Faz
 
 - Cria casos de teste (TC) de segurança como artefatos de planejamento e revisão para os pontos expostos do sistema, sem depender de solicitação pontual.
@@ -91,7 +102,7 @@ A auditoria cobre endpoints expostos sem uso, permissões acumuladas, segredo em
 
 ## Entradas e saídas
 
-**Entradas:** PRD, HLD, FDD, ADRs, diff do PR, contratos de endpoint, arquivos de pipeline, manifestos e lockfiles de dependências, configuração de deploy e evidências da suíte.
+**Entradas:** PRD, HLD, FDD, ADRs, seções aplicáveis dos playbooks, diff do PR, contratos de endpoint, arquivos de pipeline, manifestos e lockfiles de dependências, configuração de deploy e evidências da suíte.
 
 **Saídas:** TCs de segurança, parecer de segurança (aprovado / aprovado com ressalvas / reprovado), achados e exigências por item, validação da correção e proposta de ADR quando necessária.
 

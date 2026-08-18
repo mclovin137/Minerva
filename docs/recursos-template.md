@@ -2,20 +2,36 @@
 
 ## Onboarding mínimo da sessão
 
-Este é o único recurso inevitável do template. Na primeira resposta da sessão, antes de usar documentos, agentes, skills ou hooks do projeto, pergunte exatamente:
+Este é o único recurso inevitável do template. Na primeira resposta da sessão, antes de usar
+documentos ou skills do projeto, apresente os itens disponíveis de cada uma dessas categorias e
+pergunte exatamente:
 
-> Quais recursos do template você quer usar nesta sessão? Você pode escolher documentos, agentes, skills e hooks — todos, alguns ou nenhum.
+> Quais documentos e skills do template você quer habilitar nesta sessão? Escolha os itens pelo nome, todos ou nenhum.
 
-Até a resposta, não leia, crie, altere ou execute esses recursos além desta instrução mínima. Não persista nem deduza a escolha: a resposta do usuário governa somente a sessão atual e pode ser alterada a qualquer momento.
+Até a resposta, não leia, crie, altere ou execute documentos ou skills além desta instrução mínima.
+Não persista nem deduza a escolha: a resposta do usuário governa somente a sessão atual e pode ser
+alterada a qualquer momento.
 
 ## Aplicação da escolha
 
-- **Nenhum:** trabalhe sem a governança do template, respeitando instruções superiores da ferramenta.
-- **Seleção parcial:** use apenas as categorias e itens escolhidos.
-- **Todos:** os recursos necessários à atividade podem ser usados conforme seus contratos.
+- **Nenhum:** não use documentos nem skills opcionais do template, respeitando instruções superiores da ferramenta.
+- **Seleção parcial:** use somente os documentos e as skills nomeados pelo usuário.
+- **Todos:** use os documentos e as skills necessários à atividade, conforme seus contratos.
 
-Antes de usar um recurso, explique dependências necessárias. Por exemplo, usar um agente ou uma skill pode exigir ler sua definição canônica e o contrato aplicável; usar um hook depende de suporte comprovado da ferramenta. Nada é habilitado silenciosamente.
+Antes de usar um documento ou uma skill, explique dependências necessárias. Por exemplo, uma skill
+pode exigir ler sua definição canônica e o contrato aplicável. Nada é habilitado silenciosamente.
 
-A resposta conversacional orienta a sessão, mas não reconfigura hooks automaticamente. Para ativar automação real de ciclo de vida em sessão futura, o usuário deve pedir ou autorizar a configuração compatível; não há persistência oculta, `UserPromptSubmit` nem escrita automática de configuração. Hooks não ativos continuam versionados e podem ser validados sem serem executados pela sessão.
+Agentes e hooks não são itens de escolha no onboarding. Agentes são acionados conforme a
+responsabilidade e os gatilhos canônicos; hooks obedecem à configuração versionada e ao suporte
+comprovado da ferramenta. A resposta conversacional não reconfigura hooks automaticamente; não há
+persistência oculta, `UserPromptSubmit` nem escrita automática de configuração. Hooks não ativos
+continuam versionados e podem ser validados sem serem executados pela sessão.
 
-Depois do opt-in, cada recurso escolhido mantém integralmente seu contrato. `docs/rules.md` continua sendo a fonte canônica das regras quando documentos de governança forem habilitados.
+Depois do opt-in, cada documento e skill escolhido mantém integralmente seu contrato.
+`docs/rules.md` continua sendo a fonte canônica das regras quando documentos de governança forem habilitados.
+
+## Itens apresentados pelo hook
+
+O hook monta a lista a partir dos índices versionados: documentos de governança em `docs/` e skills
+em `docs/skills/`. Ele apresenta cada item pelo nome e caminho, sem carregar o conteúdo do item
+antes da escolha. Agentes e hooks não aparecem nessa lista.
