@@ -117,7 +117,7 @@ Gatilhos obrigatórios (criação, edição **ou** remoção):
 
 Decisões estruturais e escolhas de tecnologia entram como **ADR** — inclusive as pendências listadas no fim deste documento.
 
-**ADR, PRD, HLD e as notas de responsabilidade têm cópia canônica na base e espelho no repositório** (`docs/adrs/`, `docs/hlds/`, `docs/prds/`, `docs/roles/`). O espelho e a pendência seguem o contrato em *Arquitetura e testes → Cópia canônica e espelho*. Pendência dentro do prazo é rastreável; pendência vencida bloqueia conclusão e trabalho dependente.
+**ADR, PRD, HLD, FDD e as notas de responsabilidade têm cópia canônica na base e espelho no repositório** (`docs/adrs/`, `docs/hlds/`, `docs/fdds/`, `docs/prds/`, `docs/roles/`). O espelho e a pendência seguem o contrato em *Arquitetura e testes → Cópia canônica e espelho*. Pendência dentro do prazo é rastreável; pendência vencida bloqueia conclusão e trabalho dependente.
 
 ---
 
@@ -224,7 +224,7 @@ Yoda, Ted, Neo e Jarvis mantêm pareceres independentes dentro do próprio escop
 
 As decisões vigentes desta seção são explícitas neste documento. Decisões adicionais só existem quando uma aplicação consumidora as registrar; este resumo não substitui esses documentos.
 
-**Cópia canônica e espelho.** A **base Obsidian é a cópia canônica** de ADR, PRD, HLD e das notas de responsabilidade — é o que a regra de ferro 3 determina. O repositório guarda um **espelho de leitura** em [`docs/adrs/`](adrs/), [`docs/hlds/`](hlds/), [`docs/prds/`](prds/) e [`docs/roles/`](roles/), para que um agente trabalhando no código leia a decisão sem depender de acesso ao vault. A sincronização segue três regras:
+**Cópia canônica e espelho.** A **base Obsidian é a cópia canônica** de ADR, PRD, HLD, FDD e das notas de responsabilidade — é o que a regra de ferro 3 determina. O repositório guarda um **espelho de leitura** em [`docs/adrs/`](adrs/), [`docs/hlds/`](hlds/), [`docs/fdds/`](fdds/), [`docs/prds/`](prds/) e [`docs/roles/`](roles/), para que um agente trabalhando no código leia a decisão sem depender de acesso ao vault. A sincronização segue três regras:
 
 1. **Pendência rastreada primeiro.** Criação, edição ou remoção é registrada imediatamente em `docs/continuidade.md`, com origem, destino, responsável e prazo máximo de 24 horas; pedido do usuário antecipa a sincronização.
 2. **A base vence após conferência.** Em divergência confirmada entre as cópias, vale a base; o espelho é regenerado a partir dela, não reconciliado à mão. Antes da conferência, o registro operacional temporário não pode alegar que a base foi atualizada.
@@ -322,6 +322,7 @@ Playbooks são consulta seletiva e não substituem ADR, HLD, FDD ou skill prescr
 | `docs/playbooks/` | Referências diagnósticas e decisórias por gatilho |
 | `docs/adrs/` | Espelho das ADRs; cópia canônica na base Obsidian |
 | `docs/hlds/` | Espelho do HLD; cópia canônica na base Obsidian |
+| `docs/fdds/` | Espelho dos FDDs; cópia canônica na base Obsidian |
 | `docs/prds/` | Espelho dos PRDs; cópia canônica na base Obsidian |
 | `docs/roles/` | Espelho das três responsabilidades da regra 4; cópia canônica na base Obsidian |
 | `.env.example` | Contrato de configuração sem segredos; valores reais ficam fora do repositório |

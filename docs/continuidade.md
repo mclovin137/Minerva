@@ -12,7 +12,7 @@ Unificar planejamento e estado observado em um único artefato, atualizar os ada
 
 - Não criar produto, stack, dependência, diagrama ou infraestrutura de aplicação.
 - Não alterar o conteúdo de `playbook-backend.md`, `playbook-database.md` ou `playbook-security.md`.
-- Não atualizar a base Obsidian nesta mudança: as pendências verificáveis abaixo são a fonte operacional temporária até a sincronização.
+- Não sincronizar as alterações novas na base Obsidian nesta mudança: as pendências verificáveis abaixo são a fonte operacional temporária até a sincronização. A única ação externa executada foi a remoção autorizada da cópia canônica da decisão arquitetural anterior.
 
 ## Plano
 
@@ -34,9 +34,9 @@ Unificar planejamento e estado observado em um único artefato, atualizar os ada
 
 - **Objetivo:** trocar os artefatos duplicados de continuidade por uma fonte operacional única e rastrear a sincronização documental diferida.
 - **Decisão:** o usuário autorizou expressamente a migração sem ADR, resolvendo o conflito material entre a natureza estrutural da mudança e a dispensa solicitada (regra 10). `docs/continuidade.md` é a fonte operacional temporária rastreada no repositório. A regra 11 torna documentos, agentes, skills e hooks opcionais por sessão; apenas o onboarding mínimo é ativo por padrão, e resposta conversacional não reconfigura hooks. Todo gatilho documental vira pendência imediata com origem, destino, responsável e prazo máximo de 24 horas; a base Obsidian só é declarada atualizada após conferência.
-- **Evidências:** `jq` confirmou que apenas onboarding está registrado e que não há `PreToolUse`/`PostToolUse` ativo; `bash -n`, paridade de skills/agentes e rejeição de cache passaram. Smoke dos hooks com payload seguro validou onboarding e os adaptadores inativos; em clone temporário, a continuidade preservou idempotência e alterou apenas a região gerada. Busca de referências legadas, links Markdown, `git diff --check` e varredura de padrões de credenciais passaram. A cópia canônica conhecida da decisão anterior foi conferida antes e confirmada ausente após sua remoção autorizada.
+- **Evidências:** `jq` confirmou que apenas onboarding está registrado e que não há `PreToolUse`/`PostToolUse` ativo; `bash -n`, paridade de skills/agentes e rejeição de cache passaram. Smoke dos hooks com payload seguro validou onboarding e os adaptadores inativos; em clone temporário, a continuidade preservou idempotência e alterou apenas a região gerada. Busca de referências legadas, links Markdown, `git diff --check` e varredura de padrões de credenciais passaram. A cópia canônica conhecida da decisão anterior foi conferida antes e confirmada ausente após sua remoção autorizada. Commit `2677a4ba449e195cb672b10e8ed749bb4e2cc6b3` foi enviado sem força para a PR #1; o workflow `Validar template` concluiu com sucesso em https://github.com/mclovin137/Minerva/actions/runs/32169498343.
 - **Riscos e lacunas:** a base Obsidian pode ficar temporariamente defasada dentro do prazo. Divergência não é reconciliada silenciosamente e pendência vencida bloqueia conclusão ou trabalho dependente.
-- **Próximo passo:** revisar o diff final, criar e enviar o commit na branch atual para atualizar a PR #1; depois, sincronizar as pendências listadas.
+- **Próximo passo:** aguardar revisão independente da PR #1; depois, sincronizar as pendências listadas dentro do prazo e conferir cada destino antes de declará-lo atualizado.
 
 ### Decisões explícitas do usuário
 
@@ -58,18 +58,20 @@ Pendências criadas em `2026-08-18`, com prazo máximo em `2026-08-19T23:59:59-0
 | `docs/agentes/homem-de-ferro.md`, `docs/agentes/severino.md`, `docs/agentes/yoda.md`, `docs/agentes/README.md` | `agentes/homem-de-ferro.md`, `agentes/severino.md`, `agentes/yoda.md`, `agentes/index.md` | Homem de Ferro | 2026-08-19T23:59:59-03:00 | pendente de sincronização e conferência |
 | `docs/roles/implementar.md`, `docs/roles/orquestrar.md` | `roles/implementar.md`, `roles/orquestrar.md` | Homem de Ferro | 2026-08-19T23:59:59-03:00 | pendente de sincronização e conferência |
 | `docs/skills/atualizar-obsidian.md`, `docs/skills/auditar-dependencias.md`, `docs/skills/auditoria.md`, `docs/skills/criar-task.md`, `docs/skills/deep-research.md`, `docs/skills/gerar-adr.md`, `docs/skills/gerar-fdd.md`, `docs/skills/gerar-hld.md`, `docs/skills/gerar-prd.md`, `docs/skills/mapear-codebase.md`, `docs/skills/refinar-task.md` | notas homônimas em `skills/` | Yoda | 2026-08-19T23:59:59-03:00 | pendente de sincronização e conferência |
+| `docs/hlds/README.md`, `docs/fdds/README.md` | `hlds/README.md`, `fdds/README.md` | Yoda | 2026-08-19T23:59:59-03:00 | pendente de sincronização e conferência |
 | Escopo e estado desta task | `tasks/t-002-governanca-controles-e-c4.md` | Homem de Ferro | 2026-08-19T23:59:59-03:00 | pendente de sincronização e conferência |
 
 ## Região gerada
 
 <!-- minerva-continuity:generated:start -->
-Última sincronização: `2026-08-18T18:07:42Z`
+Última sincronização: `2026-08-18T18:12:33Z`
 
 ### Criados
-- Nenhum.
+- `docs/fdds/README.md`
+- `docs/hlds/README.md`
 
 ### Alterados
-- `.github/workflows/validar-template.yml`
+- `README.md`
 - `docs/rules.md`
 
 ### Removidos
