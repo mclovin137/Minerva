@@ -24,6 +24,10 @@ jobs:
           while IFS= read -r -d '' arquivo; do
             jq empty "$arquivo"
           done < <(find .claude .codex -type f -name '*.json' -print0)
+          jq -e '(.hooks.SessionStart[0].hooks | length == 1) and (.hooks.SessionStart[0].hooks[0].command | contains("onboarding-recursos-template.sh"))' .claude/settings.json >/dev/null
+          jq -e '.hooks.PreToolUse == null and .hooks.PostToolUse == null' .claude/settings.json >/dev/null
+          jq -e '(.hooks.SessionStart[0].hooks | length == 1) and (.hooks.SessionStart[0].hooks[0].command | contains("onboarding-recursos-template.sh"))' .codex/hooks.json >/dev/null
+          jq -e '.hooks.PreToolUse == null and .hooks.PostToolUse == null' .codex/hooks.json >/dev/null
 
       - name: Validar sintaxe dos scripts shell
         shell: bash
@@ -89,11 +93,40 @@ jobs:
           executar 'Codex guarda' bash .codex/hooks/guarda-orquestrador.sh
           executar 'Claude sessão' bash .claude/hooks/sessao-orquestrador.sh
           executar 'Codex sessão' bash .codex/hooks/sessao-orquestrador.sh
+          executar 'Claude onboarding' bash .claude/hooks/onboarding-recursos-template.sh
+          grep -Fq 'Quais recursos do template você quer usar nesta sessão?' "$temporario/saida"
+          executar 'Codex onboarding' bash .codex/hooks/onboarding-recursos-template.sh
+          grep -Fq 'Quais recursos do template você quer usar nesta sessão?' "$temporario/saida"
           cp -a . "$temporario/repo"
           executar 'Claude continuidade init' bash "$temporario/repo/.claude/hooks/sincronizar-continuidade.sh" init
           executar 'Claude continuidade sync' bash "$temporario/repo/.claude/hooks/sincronizar-continuidade.sh" sync
           executar 'Codex continuidade init' bash "$temporario/repo/.codex/hooks/sincronizar-continuidade.sh" init
           executar 'Codex continuidade sync' bash "$temporario/repo/.codex/hooks/sincronizar-continuidade.sh" sync
+
+          sem_regiao() {
+            sed '/<!-- minerva-continuity:generated:start -->/,/<!-- minerva-continuity:generated:end -->/d' "$1"
+          }
+          continuidade="$temporario/repo/docs/continuidade.md"
+          sem_regiao "$continuidade" >"$temporario/antes"
+          printf '\nMudação de smoke do hook.\n' >>"$temporario/repo/README.md"
+          executar 'Claude continuidade após mutação' bash "$temporario/repo/.claude/hooks/sincronizar-continuidade.sh" sync
+          sem_regiao "$continuidade" >"$temporario/depois"
+          cmp -s "$temporario/antes" "$temporario/depois"
+          cp "$continuidade" "$temporario/primeira-sincronizacao"
+          executar 'Codex continuidade idempotente' bash "$temporario/repo/.codex/hooks/sincronizar-continuidade.sh" sync
+          cmp -s "$temporario/primeira-sincronizacao" "$continuidade"
+          test "$(grep -Fc '<!-- minerva-continuity:generated:start -->' "$continuidade")" -eq 1
+          test "$(grep -Fc '<!-- minerva-continuity:generated:end -->' "$continuidade")" -eq 1
+
+      - name: Rejeitar referências aos artefatos de continuidade substituídos
+        shell: bash
+        run: |
+          set -euo pipefail
+          if rg -n 'docs/(plan|state)\.md' README.md docs .claude .codex .github \
+            --glob '*.md' --glob '*.sh' --glob '*.bash' --glob '*.json' --glob '*.yml' --glob '*.yaml'; then
+            printf 'Há referência a artefato de continuidade substituído.\n' >&2
+            exit 1
+          fi
 
       - name: Validar referências Markdown internas
         shell: bash

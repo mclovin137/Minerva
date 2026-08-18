@@ -9,37 +9,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/sessao-orquestrador.sh\"",
-            "statusMessage": "Carregando o papel do orquestrador"
-          },
-          {
-            "type": "command",
-            "command": "bash \"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/sincronizar-continuidade.sh\" init",
-            "statusMessage": "Inicializando a continuidade"
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Write|Edit|NotebookEdit|Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/guarda-orquestrador.sh\"",
-            "statusMessage": "Verificando a delegação"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit|NotebookEdit|Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/sincronizar-continuidade.sh\" sync",
-            "statusMessage": "Sincronizando a continuidade"
+            "command": "bash \"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/onboarding-recursos-template.sh\"",
+            "statusMessage": "Apresentando opções de recursos"
           }
         ]
       }

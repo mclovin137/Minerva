@@ -6,6 +6,8 @@
 
 Auditar uma entrega depois do PR e antes do merge, comparando primeiro a cadeia aprovada e só depois o diff. A auditoria pertence à responsabilidade de **planejar/revisar** e precisa ser feita por agente diferente de quem implementou.
 
+Use esta skill somente depois de o usuário habilitar skills; se agentes também forem usados, explique que a auditoria requer a definição e a responsabilidade de planejar/revisar.
+
 ## Origem e adaptação
 
 Adaptada da skill `auditoria` do projeto [mclovin137/TGM2](https://github.com/mclovin137/TGM2/tree/abc15b18bdc3e814c1dffa5e4e1eb99de7a7e292/.claude/skills/auditoria), commit `abc15b18bdc3e814c1dffa5e4e1eb99de7a7e292`. A origem não declarou licença própria. A adaptação remove referências a `roles.md`, `state.md`, `plan.md`, pré-push e branch específica, e aplica o fluxo e os gates do projeto Minerva.
@@ -22,7 +24,7 @@ Bloquear se faltar artefato obrigatório do caminho classificado, se a exceção
 
 ## Procedimento
 
-1. Ler `docs/rules.md`, `docs/plan.md`, `docs/state.md` e `docs/lib.md`.
+1. Ler `docs/rules.md`, `docs/continuidade.md` e `docs/lib.md`.
 2. Identificar a task quando aplicável, validar a classificação e reconstruir o caminho: PRD, HLD, FDD e ADRs no fluxo completo; objetivo, superfície, exclusões, validações e pareceres aplicáveis na via rápida; ou registro no PR, elegibilidade e ausência de gatilhos na exceção enxuta.
 3. Extrair escopo, critérios de aceite ou validações mecânicas, invariantes, contratos e decisões vigentes antes de abrir o diff.
 4. Inspecionar o diff completo e relacionar cada arquivo ao escopo autorizado.
@@ -43,7 +45,7 @@ Bloquear se faltar artefato obrigatório do caminho classificado, se a exceção
 - Não há segredo, dado sensível em log, vulnerabilidade relevante conhecida ou dependência não analisada.
 - Migration, quando houver, tem ida e volta testadas e nota Obsidian por objeto DDL.
 - Código e documentação de comportamento mudaram juntos.
-- As notas Obsidian existem, estão atualizadas e correspondem aos gatilhos.
+- As notas Obsidian estão sincronizadas e conferidas, ou cada pendência tem origem, destino, responsável e prazo dentro de 24 horas em `docs/continuidade.md`; pendência vencida bloqueia conclusão e trabalho dependente.
 - O pipeline de review e o pipeline de execução de casos de teste estão verdes.
 - Publicação e deploy devem aderir ao workflow aprovado e à regra de custo financeiro zero.
 

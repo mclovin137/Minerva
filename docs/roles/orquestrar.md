@@ -23,7 +23,7 @@ Primeira das três responsabilidades da regra de ferro 4. Orquestrar é receber 
 - Manter o estado do trabalho: o que está em andamento, o que está bloqueado e por quê, o que aguarda auditoria.
 - Recusar demanda que pula etapa do fluxo, dizendo qual etapa falta.
 - Recusar proposta que viole regra de ferro, devolvendo alternativa conforme.
-- Garantir que a atualização da base Obsidian foi delegada **junto** da mudança, nunca depois (regra 3).
+- Depois do opt-in, garantir que todo gatilho documental foi registrado imediatamente em `docs/continuidade.md` e que a sincronização da base Obsidian foi delegada para o prazo de até 24 horas, ou antecipada por pedido do usuário (regra 3).
 - Relatar ao usuário o que os agentes fizeram, sem inventar resultado que não recebeu.
 
 Leitura e coordenação são permitidas sem delegar: ler arquivos, buscar (`grep`, `find`, `ls`), inspecionar estado (`git status`, `git log`, `git diff`), rodar comando somente-leitura e conversar com o usuário.
@@ -40,9 +40,9 @@ Leitura e coordenação são permitidas sem delegar: ler arquivos, buscar (`grep
 
 | Agente | Encarnação |
 |---|---|
-| [homem-de-ferro](../agentes/homem-de-ferro.md) | a sessão principal, sempre |
+| [homem-de-ferro](../agentes/homem-de-ferro.md) | a sessão principal, quando o usuário habilitar agentes |
 
-É a única responsabilidade com um único titular, e o único agente que **não** é subagente. No Claude Code, hooks declarados em `.claude/settings.json` injetam o papel, bloqueiam escrita da sessão principal e sincronizam fatos mecânicos de continuidade — todos adaptadores, não a regra (regra de ferro 1).
+É a única responsabilidade com um único titular, e o único agente que **não** é subagente. Após o opt-in, hooks compatíveis podem ser habilitados pelo usuário; eles são adaptadores, não a regra (regras 1 e 11).
 
 ## Fronteira com as outras responsabilidades
 
@@ -51,4 +51,4 @@ Orquestrar decide **quem** faz e **quando**; não decide **como** (isso é [plan
 ## Histórico
 
 - 2026-08-15 — Nota criada a partir da regra de ferro 4 e das definições de agente do repositório.
-- 2026-08-16 — Papel integrado a `docs/roles.md`, `docs/plan.md`, `docs/state.md`, `docs/lib.md` e ao hook limitado de continuidade; decisões estruturais vigentes separadas dos detalhes ainda `TBD`.
+- 2026-08-16 — Histórico externo: papel integrado a artefatos de continuidade e ao hook limitado; decisões estruturais vigentes separadas dos detalhes ainda `TBD`.

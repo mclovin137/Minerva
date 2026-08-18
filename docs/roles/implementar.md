@@ -21,7 +21,7 @@ Terceira das três responsabilidades da regra de ferro 4. Implementar é produzi
 - Escrever o **teste de integração** de todo endpoint tocado: idempotente, gerando as evidências definidas pela ADR de testes (regra de ferro 7).
 - Construir e manter os dois pipelines (regra 8) e o workflow de deploy aprovado, sem alterar recursos externos fora da task autorizada.
 - Monitorar o consumo do free tier e avisar antes de encostar no limite (regra 5).
-- Atualizar a base Obsidian **no mesmo turno**, para todo artefato-gatilho tocado (regra 3, ver [atualizar-obsidian](../skills/atualizar-obsidian.md)).
+- Registrar imediatamente em `docs/continuidade.md` a pendência de todo artefato-gatilho tocado e sincronizar a base Obsidian em até 24 horas, ou antes por pedido do usuário (regra 3, ver [atualizar-obsidian](../skills/atualizar-obsidian.md)).
 - Abrir o PR com link para task e PRD, evidências anexadas e a declaração dos caminhos escritos na base.
 - Responder ao review e corrigir o que a auditoria apontar.
 
@@ -47,7 +47,7 @@ A fronteira entre os dois é explícita: Severino implementa e mantém os arquiv
 
 ## Estado em 2026-08-15
 
-A ADR 001 define somente as fundações do template; a base arquitetural de uma aplicação consumidora depende de suas próprias ADRs. Ainda não existe task de produto derivada de PRD e FDD; por isso implementação de feature continua bloqueada, embora tarefas operacionais e documentais explicitamente delegadas possam executar decisões aceitas.
+As regras vigentes definem somente as fundações do template; a base arquitetural de uma aplicação consumidora depende de suas próprias ADRs. Ainda não existe task de produto derivada de PRD e FDD; por isso implementação de feature continua bloqueada, embora tarefas operacionais e documentais explicitamente delegadas possam executar decisões aceitas.
 
 ## Histórico
 

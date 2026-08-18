@@ -30,7 +30,7 @@ Se o usuário delimitar pastas, respeitar esse escopo. Caso contrário, usar a r
 
 ## Procedimento
 
-1. Ler `docs/rules.md`, `docs/plan.md`, `docs/state.md` e `docs/lib.md` quando estiver no projeto Minerva e identificar a responsabilidade exercida.
+1. Ler `docs/rules.md`, `docs/continuidade.md` e `docs/lib.md` quando estiver no projeto Minerva e identificar a responsabilidade exercida.
 2. Delimitar raiz, profundidade, exclusões e limites de acesso.
 3. Inventariar linguagens, manifestos, lockfiles, build, infraestrutura, CI/CD, observabilidade e diretórios relevantes.
 4. Localizar entry points em rotas, controllers, handlers, comandos CLI, jobs, schemas, serviços RPC, eventos e composição da aplicação.

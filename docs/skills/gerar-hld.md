@@ -8,7 +8,7 @@ Conduzir uma entrevista estruturada, uma pergunta por vez, e gerar um HLD técni
 
 O dono do HLD é o **Yoda**, na responsabilidade de planejar/revisar. Uma decisão estrutural ainda não aprovada não pode ser tratada como fato: registrar como pendência e encaminhar para ADR. Hipótese nunca vira decisão.
 
-Antes de iniciar, ler `docs/rules.md`, `docs/plan.md`, `docs/state.md`, `docs/lib.md` e os PRDs, ADRs e HLDs relacionados. O template só fixa Git, GitHub e Docker; qualquer escolha de linguagem, framework, persistência, hospedagem, testes ou topologia exige ADR. O domínio de referência e o legado são insumos a validar, não escolhas técnicas. Lacuna de negócio permanece `❓ LACUNA`.
+Antes de iniciar, ler `docs/rules.md`, `docs/continuidade.md`, `docs/lib.md` e os PRDs, ADRs e HLDs relacionados. O template só fixa Git, GitHub e Docker; qualquer escolha de linguagem, framework, persistência, hospedagem, testes ou topologia exige ADR. O domínio de referência e o legado são insumos a validar, não escolhas técnicas. Lacuna de negócio permanece `❓ LACUNA`.
 
 ## Condução da entrevista
 

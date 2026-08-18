@@ -9,7 +9,7 @@ Conduzir uma Deep Research em duas fases sequenciais:
 1. **Entrevista de contexto:** entender tema, contexto e expectativa e gerar um briefing estruturado. Esta fase não produz pesquisa técnica.
 2. **Reestruturação documental:** reorganizar integralmente a pesquisa já importada no contexto em um *Deep Research Document* de 16 seções. Esta fase não pesquisa fontes novas, não faz grounding e não reduz o material recebido.
 
-Pertence à responsabilidade de **planejar/revisar**. Antes de iniciá-la, ler `docs/rules.md`, `docs/plan.md`, `docs/state.md`, `docs/lib.md` e documentos relacionados. Toda saída é em pt-BR. Ao criar ou alterar skill ou task, seguir `docs/skills/atualizar-obsidian.md`.
+Pertence à responsabilidade de **planejar/revisar**. Antes de iniciá-la, ler `docs/rules.md`, `docs/continuidade.md`, `docs/lib.md` e documentos relacionados. Toda saída é em pt-BR. Ao criar ou alterar skill ou task, seguir `docs/skills/atualizar-obsidian.md`.
 
 O *Deep Research Document* final pode servir de base para gerar outros documentos quando o usuário solicitar expressamente. Essa possibilidade não autoriza criar documentos derivados automaticamente, nem altera as regras de preservação integral da fase 2.
 

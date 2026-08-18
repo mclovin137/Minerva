@@ -40,7 +40,7 @@ Fazer **uma pergunta por vez** e aguardar a resposta. Ao fim de cada etapa, resu
 
 ## Procedimento
 
-1. Ler `docs/rules.md`, `docs/plan.md`, `docs/state.md`, `docs/lib.md` e os artefatos de origem antes da entrevista.
+1. Ler `docs/rules.md`, `docs/continuidade.md`, `docs/lib.md` e os artefatos de origem antes da entrevista.
 2. Procurar ADRs de tema semelhante na base para evitar duplicidade e definir o próximo `NNN`.
 3. Conduzir a entrevista e executar as checagens abaixo.
 4. Renderizar exatamente o molde Markdown.

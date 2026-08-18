@@ -8,7 +8,7 @@ Conduzir uma entrevista estruturada, uma pergunta por vez, e gerar um PRD de fea
 
 O PRD pertence à responsabilidade de **planejar/revisar** e descreve o quê e o porquê. Não decide arquitetura. Topologia, componentes propostos e decisões técnicas pertencem ao HLD do Yoda; decisões estruturais pertencem a ADR. O PRD registra somente requisitos, integrações necessárias, contexto de implantação e restrições que informem essas decisões.
 
-Antes de iniciar, ler `docs/rules.md`, `docs/plan.md`, `docs/state.md`, `docs/lib.md`, roadmap, épico e documentos relacionados. O PRD respeita as decisões vigentes, mas não preenche versão, configuração, topologia ou regra mantida como `TBD` ou `❓ LACUNA`. Hipótese nunca vira decisão.
+Antes de iniciar, ler `docs/rules.md`, `docs/continuidade.md`, `docs/lib.md`, roadmap, épico e documentos relacionados. O PRD respeita as decisões vigentes, mas não preenche versão, configuração, topologia ou regra mantida como `TBD` ou `❓ LACUNA`. Hipótese nunca vira decisão.
 
 ## Condução da entrevista
 

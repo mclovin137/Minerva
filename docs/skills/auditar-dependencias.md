@@ -42,7 +42,7 @@ Registrar URL e data de consulta no relatório. Não fabricar CVE, CVSS, versão
 
 ## Procedimento
 
-1. Ler `docs/rules.md`, `docs/plan.md`, `docs/state.md` e `docs/lib.md` quando estiver no projeto Minerva e delimitar raiz, subpastas e ecossistemas.
+1. Ler `docs/rules.md`, `docs/continuidade.md` e `docs/lib.md` quando estiver no projeto Minerva e delimitar raiz, subpastas e ecossistemas.
 2. Localizar manifestos, lockfiles, catálogos, SBOMs e arquivos de licença sem executar resolução.
 3. Construir o inventário de dependências diretas e, separadamente, transitivas evidenciadas.
 4. Localizar usos no código e configurações, citando caminho e linha.

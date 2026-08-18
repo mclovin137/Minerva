@@ -6,6 +6,8 @@
 
 Procedimento que mantém a base Obsidian do projeto em dia sempre que uma mudança toca um artefato-gatilho (regra de ferro 3). É **autossuficiente**: só precisa de leitura e escrita de arquivo. Não depende de MCP, plugin, script, `git`, PR, pipeline, índice, manual, nem de qualquer nota já existir. Tudo que ela precisa saber está escrito aqui.
 
+Use esta skill somente depois de o usuário habilitar skills e documentos de governança; explique que ela também aplica a regra 3 e consulta `docs/continuidade.md`.
+
 ## Onde fica a base
 
 ```
@@ -13,9 +15,9 @@ Windows : C:\Users\mclov\OneDrive\Documentos\Obsidian Vault\mclov\Documents\Seco
 WSL     : /mnt/c/Users/mclov/OneDrive/Documentos/Obsidian Vault/mclov/Documents/SecondBrain/Bases/Minerva
 ```
 
-A base fica **fora do repositório**. Consequência que mais importa: o diff do PR não prova que você a atualizou. Por isso a atualização acontece **no mesmo turno** da mudança, nunca depois, e você declara explicitamente os caminhos que escreveu.
+A base fica **fora do repositório**. Consequência que mais importa: o diff do PR não prova que você a atualizou. Ao tocar um gatilho, registre imediatamente em `docs/continuidade.md` a origem, destino, responsável e prazo; a sincronização ocorre em até 24 horas, ou antes se o usuário pedir, e só é declarada após conferir o caminho escrito.
 
-Se o caminho estiver inacessível (OneDrive fora do ar, permissão negada), **diga isso ao usuário e não afirme que documentou.** Não invente um caminho alternativo nem escreva a nota dentro do repositório.
+Se o caminho estiver inacessível (OneDrive fora do ar, permissão negada), **diga isso ao usuário e não afirme que documentou.** Mantenha a pendência rastreada no prazo; não invente caminho alternativo. Pendência vencida bloqueia conclusão e trabalho dependente.
 
 ## Quando usar
 
@@ -79,18 +81,19 @@ A nota é **autocontida**: quem lê só ela entende o assunto sem abrir o reposi
 
 Nunca invente fato, número, data ou decisão que não foi estabelecido. Desconhecido é `TBD` e seção vazia é resposta correta.
 
-**4. Declare o que escreveu.** Na descrição do PR quando houver PR, e sempre na resposta ao usuário:
+**4. Declare o estado real.** Na descrição do PR quando houver PR, e sempre na resposta ao usuário, informe os caminhos conferidos ou a pendência registrada:
 
 ```markdown
 ## Base Obsidian (regra de ferro 3)
 - Gatilhos tocados: <lista, ou "nenhum">
-- Notas escritas: <caminhos completos, ou "nenhuma — nenhum gatilho tocado">
+- Notas sincronizadas e conferidas: <caminhos completos, ou "nenhuma">
+- Pendências: <origem, destino, responsável e prazo, ou "nenhuma">
 ```
 
 ## Verificação
 
-1. **Você**, no mesmo turno da mudança. É a barreira principal, porque a base está fora do repositório e nenhuma automação a enxerga.
-2. **A auditoria**, no papel de planejar/revisar: roda a tabela de gatilhos contra a mudança e abre os caminhos declarados para conferir se existem e batem. Declaração que não corresponde ao que está no disco reprova o PR.
+1. **Você**, ao registrar a pendência no mesmo turno e ao sincronizar dentro do prazo. É a barreira principal, porque a base está fora do repositório e nenhuma automação a enxerga.
+2. **A auditoria**, no papel de planejar/revisar: roda a tabela de gatilhos contra a mudança, confere as notas declaradas e verifica prazo, origem, destino e responsável das pendências. Pendência completa dentro do prazo é aceitável; vencida bloqueia conclusão ou trabalho dependente.
 
 Não há terceira camada. Um pipeline não consegue verificar um diretório que não está no repositório — é exatamente por isso que os dois primeiros não se negociam.
 
@@ -99,20 +102,20 @@ Não há terceira camada. Um pipeline não consegue verificar um diretório que 
 | Desculpa | Realidade |
 |---|---|
 | "É só refactor, não mudou regra" | Se não mudou gatilho, você declara `nenhum` em dez segundos. Você só está lendo esta linha porque teve dúvida — e dúvida significa que mudou. |
-| "Documento depois" | O depois nunca vem, e a base fora do repositório significa que ninguém vai perceber a falta até tomar uma decisão errada em cima dela. |
+| "Documento depois" | Só é aceitável como pendência registrada, com destino, responsável e prazo máximo de 24 horas; sem isso, a falta fica invisível. |
 | "O código já é a documentação" | O código não diz por que a regra existe, quem decidiu, nem o que foi descartado. |
 | "É índice, não é tabela" | Índice, trigger e função estão nomeados um a um na regra 3. |
 | "A dependência é só de teste" | Toda dependência carrega custo, e custo zero é regra de ferro 5. |
 | "É hotfix, é urgente" | Hotfix exige PR e revisão independente. Só dispensa nota se houver autorização explícita do usuário, cumprir integralmente a exceção enxuta da regra 9 e não tocar gatilho; se houver dúvida, a nota é obrigatória. |
-| "O usuário pediu só o código" | O usuário fixou a regra 3 antes de pedir código. O pedido já inclui a documentação. |
+| "O usuário pediu só o código" | O usuário fixou a regra 3 antes de pedir código. O pedido já inclui registrar a pendência e sincronizá-la no prazo. |
 | "A nota já existe" | Existir não é estar atualizada. Artefato mudou, nota muda junto, com histórico. |
 | "A pasta não existe ainda" | Crie a pasta. O passo 2 existe para isso. |
 | "Nenhum pipeline verifica mesmo" | Correto, e é o motivo pelo qual isto depende de você. A próxima sessão lê a base como verdade; base errada produz trabalho errado. |
 
 ## Sinais de alerta — pare e volte
 
-- Você pensou "depois eu documento".
-- Você mudou migração, manifesto de pacote ou arquivo de domínio e não escreveu nada em `<BASE>`.
+- Você pensou "depois eu documento" sem registrar pendência na continuidade.
+- Você mudou migração, manifesto de pacote ou arquivo de domínio sem pendência rastreada ou nota conferida em `<BASE>`.
 - Sua resposta ao usuário não tem o bloco de declaração.
 - Você escreveu regra nova dentro de `CLAUDE.md`, `AGENTS.md` ou `.claude/` em vez do canônico.
 - Você declarou caminhos que não conferiu que existem.

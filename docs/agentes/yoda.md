@@ -89,7 +89,7 @@ Divergência encontrada tem dois destinos possíveis, e escolher entre eles é o
 
 ## Entradas
 
-Contrato do projeto (`docs/rules.md`), `docs/plan.md`, `docs/state.md`, `docs/lib.md`, PRD e critérios de aceite, HLD e FDDs vigentes, ADRs anteriores e código existente.
+Contrato do projeto (`docs/rules.md`), `docs/continuidade.md`, `docs/lib.md`, PRD e critérios de aceite, HLD e FDDs vigentes, ADRs anteriores e código existente.
 
 ## Saídas
 

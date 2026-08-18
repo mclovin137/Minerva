@@ -78,7 +78,7 @@ Prefira TTL curto e mensure hit rate. Cache nunca é fonte de verdade e indispon
 - `--dry-run` obrigatório;
 - erro e log não acumulam dado pessoal ou array ilimitado.
 
-Use também o playbook [Banco de dados e SQL](banco-de-dados-e-sql.md).
+Use também o playbook [Banco de dados e SQL](playbook-database.md).
 
 ## 7. Modelagem de erro
 
