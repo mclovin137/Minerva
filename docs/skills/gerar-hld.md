@@ -1,5 +1,7 @@
 # Skill: gerar-hld
 
+**Autor:** Cristóvão Augusto
+
 **Definição canônica.** Adaptador de descoberta em `.claude/skills/gerar-hld/SKILL.md`, sem conteúdo próprio.
 
 ## Finalidade e responsabilidade

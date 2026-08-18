@@ -1,5 +1,7 @@
 # Skill: gerar-adr
 
+**Autor:** Cristóvão Augusto
+
 **Definição canônica.** Adaptador de descoberta em `.claude/skills/gerar-adr/SKILL.md`, sem conteúdo próprio.
 
 ## Para o futuro agente

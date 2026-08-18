@@ -1,5 +1,7 @@
 # Skill: auditar-dependencias
 
+**Autor:** Cristóvão Augusto
+
 **Definição canônica e independente de ferramenta.** Adaptador de descoberta em `.claude/skills/auditar-dependencias/SKILL.md`, sem conteúdo próprio.
 
 ## Para o futuro agente

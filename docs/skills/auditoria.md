@@ -1,5 +1,7 @@
 # Skill: auditoria
 
+**Autor:** Cristóvão Augusto
+
 **Definição canônica e independente de ferramenta.** Adaptador de descoberta em `.claude/skills/auditoria/SKILL.md`, sem conteúdo próprio.
 
 ## Para o futuro agente

@@ -1,5 +1,7 @@
 # PRDs do projeto Minerva
 
+**Autor:** Cristóvão Augusto
+
 ## Para o futuro agente
 
 Esta pasta contém o espelho versionado dos Product Requirements Documents (PRDs) do projeto Minerva. Cada PRD registra escopo, motivo e critérios de aceite de uma entrega; a cópia canônica vive na base oficial do Obsidian.

@@ -7,6 +7,7 @@ tags:
   - role
   - orquestrar
 ai-first: true
+author: Cristóvão Augusto
 ---
 
 # Role — Orquestrar
@@ -40,7 +41,7 @@ Leitura e coordenação são permitidas sem delegar: ler arquivos, buscar (`grep
 
 | Agente | Encarnação |
 |---|---|
-| [homem-de-ferro](../agentes/homem-de-ferro.md) | a sessão principal, quando o usuário habilitar agentes |
+| [batman](../agentes/batman.md) | a sessão principal, quando o usuário habilitar agentes |
 
 É a única responsabilidade com um único titular, e o único agente que **não** é subagente. Após o opt-in, hooks compatíveis podem ser habilitados pelo usuário; eles são adaptadores, não a regra (regras 1 e 11).
 

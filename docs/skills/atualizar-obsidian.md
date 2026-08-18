@@ -1,5 +1,7 @@
 # Skill — atualizar-obsidian
 
+**Autor:** Cristóvão Augusto
+
 **Definição canônica.** Adaptador de descoberta em `.claude/skills/atualizar-obsidian/SKILL.md` — ponteiro, sem conteúdo próprio.
 
 ## Para o futuro agente

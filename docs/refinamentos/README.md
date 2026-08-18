@@ -1,5 +1,7 @@
 # Refinamentos
 
+**Autor:** Cristóvão Augusto
+
 Regra: `docs/rules.md` §6.14 — **condicional por risco**, não obrigatório por épico.
 
 O parecer da versão leve (risco alto) vai **direto numa seção do PRD**, não em arquivo aqui.

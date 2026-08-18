@@ -1,5 +1,7 @@
 # Skill: security-review
 
+**Autor:** Cristóvão Augusto
+
 **Definição canônica e independente de ferramenta.** Adaptador de descoberta em `.claude/skills/security-review/SKILL.md`, sem conteúdo próprio.
 
 ## Para o futuro agente

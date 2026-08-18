@@ -1,5 +1,7 @@
 # Roles e regras do projeto Minerva
 
+**Autor:** Cristóvão Augusto
+
 **Documento canônico e independente de ferramenta.** É a fonte da verdade sobre como este projeto é operado por qualquer IA (Claude Code, Codex, outras) e por qualquer pessoa. Arquivos como `CLAUDE.md` e `AGENTS.md` são adaptadores finos que apontam para cá e não contêm regras próprias.
 
 Regra nova, mudança ou remoção de regra: **acontece aqui**, nunca em um adaptador.
@@ -53,9 +55,9 @@ A fronteira é a pergunta: *quem paga a conta e por quê?* Se o custo nasce de u
 
 Toda atividade pertence a exatamente uma das três responsabilidades. A separação existe para que nenhum agente aprove o próprio trabalho.
 
-Os agentes concretos estão definidos em `docs/agentes/`: **Homem de Ferro** (orquestrar), **Yoda** (arquitetura), **Severino** (todo o código da aplicação), **Ted Mosby** (QA), **Neo** (segurança), **Jarvis** (SRE) e **c4-diagram-generator** (diagramas C4).
+Os agentes concretos estão definidos em `docs/agentes/`: **Batman** (orquestrar), **Yoda** (arquitetura), **Severino** (todo o código da aplicação), **Patrick Jane** (QA), **Neo** (segurança), **Jarvis** (SRE) e **c4-diagram-generator** (diagramas C4).
 
-**Orquestrador — quando o fluxo da sessão o exigir, é a sessão principal (Homem de Ferro)**
+**Orquestrador — quando o fluxo da sessão o exigir, é a sessão principal (Batman)**
 - Interpreta a demanda, localiza a posição dela no fluxo (ver *Fluxo de trabalho*) e delega ao agente certo.
 - Mantém estado: o que está em andamento, o que está bloqueado, o que aguarda auditoria.
 - **Não altera, não cria e não apaga nenhum arquivo** — inclusive por shell (`>`, `rm`, `mv`, `sed -i`, mutações de git). Toda escrita acontece dentro de um agente delegado; não existe mudança pequena demais para delegar.
@@ -77,10 +79,10 @@ Definições de agentes, roles e skills são markdown neutro, versionado no repo
 
 | Agente | Responsabilidade | Escopo principal |
 |---|---|---|
-| [Homem de Ferro](agentes/homem-de-ferro.md) | Orquestrar | Interpreta, localiza a etapa, delega e acompanha; não escreve arquivos |
+| [Batman](agentes/batman.md) | Orquestrar | Interpreta, localiza a etapa, delega e acompanha; não escreve arquivos |
 | [Yoda](agentes/yoda.md) | Planejar/revisar | Arquitetura, HLD, ADR, trade-offs e conformidade arquitetural |
 | [Severino](agentes/severino.md) | Implementar | Todo o código da aplicação, migrations, pipeline-as-code e documentação associada |
-| [Ted Mosby](agentes/ted-mosby.md) | Planejar/revisar | Estratégia, casos e evidências de QA; não implementa a feature |
+| [Patrick Jane](agentes/patrick-jane.md) | Planejar/revisar | Estratégia, casos e evidências de QA; não implementa a feature |
 | [Neo](agentes/neo.md) | Planejar/revisar | Auditoria e testes de segurança; reporta e valida, não corrige feature |
 | [Jarvis](agentes/jarvis.md) | Implementar operação | Ambientes, pós-pipeline, deploy, rollback, observabilidade, backup e incidente |
 | [c4-diagram-generator](agentes/c4-diagram-generator.md) | Planejar/revisar | Diagramas C4 em PlantUML, fundamentados em FDD aprovado |
@@ -253,7 +255,7 @@ inferência. O revisor confirma cada ligação e seu sentido antes de registrá-
 permite que IA recupere intenção arquitetural a partir de contexto declarado, em vez de adivinhar
 motivos pelo código.
 
-Antes de qualquer delegação, o Homem de Ferro classifica a mudança como **via rápida** ou **fluxo completo**. Se identificar possível exceção enxuta, ele não a inicia nem a classifica autonomamente: explica escopo, motivo, controles mantidos e documentação dispensada, e pede autorização explícita do usuário para aquela mudança. Fora da exceção autorizada da regra 9, a classificação, as validações e os agentes acionados ficam registrados na task e no resumo decisório mínimo de `docs/continuidade.md`.
+Antes de qualquer delegação, o Batman classifica a mudança como **via rápida** ou **fluxo completo**. Se identificar possível exceção enxuta, ele não a inicia nem a classifica autonomamente: explica escopo, motivo, controles mantidos e documentação dispensada, e pede autorização explícita do usuário para aquela mudança. Fora da exceção autorizada da regra 9, a classificação, as validações e os agentes acionados ficam registrados na task e no resumo decisório mínimo de `docs/continuidade.md`.
 
 ### Exceção enxuta: ajuste básico ou urgente
 
@@ -397,8 +399,8 @@ Ambos são condição de merge. Publicação e deploy continuam sujeitos à regr
 | `AGENTS.md` | Codex e demais agentes | `docs/recursos-template.md`, depois `docs/rules.md` se habilitado | Ponteiro de onboarding + regra de idioma |
 | `.claude/skills/<skill>/SKILL.md` | Claude Code | `docs/skills/<skill>.md` | Frontmatter de descoberta + ponteiro |
 | `.claude/agents/<agente>.md` | Claude Code | `docs/agentes/<agente>.md` | Frontmatter de despacho (`model`, `effort`, `tools`) + ponteiro |
-| `.claude/hooks/onboarding-recursos-template.sh` | Claude Code | `docs/recursos-template.md` | Único hook registrado: injeta a pergunta de opt-in no `SessionStart` |
-| `.codex/hooks/onboarding-recursos-template.sh` | Codex | `docs/recursos-template.md` | Único hook registrado: injeta a pergunta de opt-in no `SessionStart` |
+| `.claude/hooks/onboarding-recursos-template.sh` | Claude Code | `docs/recursos-template.md` | Versionado e inativo; pode apresentar a pergunta de opt-in somente após configuração futura autorizada pelo usuário |
+| `.codex/hooks/onboarding-recursos-template.sh` | Codex | `docs/recursos-template.md` | Versionado e inativo; pode apresentar a pergunta de opt-in somente após configuração futura autorizada pelo usuário |
 | Hooks de sessão, guarda e continuidade restantes | Claude Code e Codex | suas definições canônicas | Versionados e validados, mas disponíveis e inativos até configuração futura autorizada pelo usuário |
 
 Definição canônica de skill: `docs/skills/`. Fica no repositório, e não na base Obsidian, para que um agente trabalhando no código consiga lê-la sem depender de acesso à base. A base documenta que a skill existe (gatilho da regra 3); o repositório guarda a definição executável.

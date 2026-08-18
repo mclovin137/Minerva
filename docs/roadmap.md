@@ -1,5 +1,7 @@
 # Roadmap
 
+**Autor:** Cristóvão Augusto
+
 ## Estado
 
 `❓ LACUNA` — não há direção de produto, fases, épicos ou prioridades aprovados para uma aplicação consumidora deste template.

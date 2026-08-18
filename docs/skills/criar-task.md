@@ -1,5 +1,7 @@
 # Skill: criar-task
 
+**Autor:** Cristóvão Augusto
+
 **Definição canônica.** Adaptador de descoberta em `.claude/skills/criar-task/SKILL.md`, sem conteúdo próprio.
 
 ## Para o futuro agente

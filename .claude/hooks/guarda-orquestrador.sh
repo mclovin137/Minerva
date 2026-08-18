@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# PreToolUse — impede que a sessão principal (Homem de Ferro, o Orquestrador)
+# PreToolUse — impede que a sessão principal (Batman, o Orquestrador)
 # altere, crie ou apague arquivos. Subagentes passam livremente.
 #
 # Como distingue: o input do hook traz "agent_id" APENAS quando a chamada vem de
 # dentro de um subagente. Sem agent_id = sessão principal = negado.
 #
-# Adaptador (regra de ferro 1): a regra canônica é docs/agentes/homem-de-ferro.md.
+# Adaptador (regra de ferro 1): a regra canônica é docs/agentes/batman.md.
 set -euo pipefail
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -29,12 +29,12 @@ negar() {
 }
 
 motivo_base=$(cat <<'TXT'
-BLOQUEADO — a sessão principal é o Homem de Ferro, o Orquestrador do projeto Minerva, e não altera, cria ou apaga arquivo (regra de ferro 4).
+BLOQUEADO — a sessão principal é o Batman, o Orquestrador do projeto Minerva, e não altera, cria ou apaga arquivo (regra de ferro 4).
 
 Delegue a mudança ao agente responsável, via subagente:
-  Yoda (arquitetura/ADR) · Severino (código da aplicação e pipeline-as-code) · Ted Mosby (QA) · Neo (segurança) · Jarvis (SRE e pós-pipeline)
+  Yoda (arquitetura/ADR) · Severino (código da aplicação e pipeline-as-code) · Patrick Jane (QA) · Neo (segurança) · Jarvis (SRE e pós-pipeline)
 
-Contrato: docs/agentes/homem-de-ferro.md. Leitura, busca e inspeção continuam liberadas.
+Contrato: docs/agentes/batman.md. Leitura, busca e inspeção continuam liberadas.
 TXT
 )
 

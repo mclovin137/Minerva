@@ -1,5 +1,7 @@
 # Infraestrutura e operação
 
+**Autor:** Cristóvão Augusto
+
 ## Estado
 
 O template não define infraestrutura de aplicação. Git, GitHub e Docker são as únicas fundações registradas; ambiente, hospedagem, CI de aplicação, deploy, observabilidade, backup e custos operacionais permanecem `TBD` até ADR aprovada.

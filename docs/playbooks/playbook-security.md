@@ -1,5 +1,7 @@
 # Playbook Security — riscos, identificação e correção
 
+**Autor:** Cristóvão Augusto
+
 > **Como usar**: referência de consulta seletiva do agente `security` (e do `backend-dev` ao
 > implementar área sensível). NÃO ler inteiro — o índice mapeia superfície → seção. Cada seção
 > traz: onde o risco costuma existir, **como identificar** (sinais em revisão, padrões de grep),

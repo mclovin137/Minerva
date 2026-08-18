@@ -1,0 +1,139 @@
+name: dependency-audit
+on:
+  schedule:
+    # Segunda, 09:00 UTC = 06:00 GMT-3.
+    - cron: "0 9 * * 1"
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  auditoria:
+    name: Auditoria de dependências
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Guard — manifestos × lib.md
+        id: guard_lib
+        continue-on-error: true
+        run: |
+          echo "## Guard \`lib.md\`" >> "$GITHUB_STEP_SUMMARY"
+          if bash .github/scripts/guard-lib-md.sh 2>&1 | tee /tmp/guard-lib.txt; then
+            echo "Sem divergências." >> "$GITHUB_STEP_SUMMARY"
+          else
+            { echo '```'; cat /tmp/guard-lib.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+            echo "achado=1" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Detectar ecossistemas suportados
+        id: ecossistemas
+        run: |
+          if [ -f backend/go.mod ]; then
+            echo "go=1" >> "$GITHUB_OUTPUT"
+          fi
+          if [ -f e2e/package-lock.json ] || [ -f e2e/npm-shrinkwrap.json ]; then
+            echo "npm=1" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Setup Go
+        if: steps.ecossistemas.outputs.go == '1'
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: backend/go.mod
+      - name: CVEs — Go (govulncheck)
+        id: govuln
+        if: steps.ecossistemas.outputs.go == '1'
+        continue-on-error: true
+        working-directory: backend
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@latest
+          echo "## CVEs — Go" >> "$GITHUB_STEP_SUMMARY"
+          if govulncheck ./... > /tmp/govuln.txt 2>&1; then
+            echo "Limpo." >> "$GITHUB_STEP_SUMMARY"
+          else
+            { echo '```'; tail -40 /tmp/govuln.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+            echo "achado=1" >> "$GITHUB_OUTPUT"
+          fi
+      - name: CVEs — npm
+        id: npmaudit
+        if: steps.ecossistemas.outputs.npm == '1'
+        continue-on-error: true
+        working-directory: e2e
+        run: |
+          echo "## CVEs — npm" >> "$GITHUB_STEP_SUMMARY"
+          if npm audit --audit-level=high > /tmp/npm.txt 2>&1; then
+            echo "Limpo." >> "$GITHUB_STEP_SUMMARY"
+          else
+            { echo '```'; tail -30 /tmp/npm.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+            echo "achado=1" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Versões desatualizadas (Go)
+        if: steps.ecossistemas.outputs.go == '1'
+        continue-on-error: true
+        working-directory: backend
+        run: |
+          echo "## Versões (Go)" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          go list -m -u all 2>/dev/null | grep '\[' || echo "tudo na versão mais recente"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - name: Guard — commit direto na main (F-11, controle detectivo)
+        id: guard_main
+        continue-on-error: true
+        run: |
+          echo "## Commits diretos na \`main\`" >> "$GITHUB_STEP_SUMMARY"
+          DESDE="$(date -u -d '8 days ago' +%Y-%m-%d)"
+          SOLTOS=$(git log --first-parent --no-merges --since="$DESDE" --format='%h %an %s' origin/main 2>/dev/null || true)
+          if [ -z "$SOLTOS" ]; then
+            echo "Nenhum na última semana." >> "$GITHUB_STEP_SUMMARY"
+          else
+            { echo "Commits sem merge de PR (roles.md §6.5):"; echo '```'; echo "$SOLTOS"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+            echo "achado=1" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Digest das imagens base (F-17)
+        continue-on-error: true
+        run: |
+          echo "## Imagens base (digest pinado)" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          find . -path './.git' -prune -o -name Dockerfile -type f -exec grep -H -E '^FROM ' {} + >> "$GITHUB_STEP_SUMMARY" || true
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "Confira se há release nova das bases; atualize o digest se houver." >> "$GITHUB_STEP_SUMMARY"
+      - name: Abrir ou atualizar issue (só quando há achado)
+        if: >-
+          steps.guard_lib.outputs.achado == '1' ||
+          steps.govuln.outputs.achado == '1' ||
+          steps.npmaudit.outputs.achado == '1' ||
+          steps.guard_main.outputs.achado == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TITULO="Auditoria semanal de dependências — achados"
+          CORPO=$(cat <<EOF
+          A rotina semanal encontrou achados. Detalhe completo no
+          [job summary desta execução](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+
+          | Verificação | Achado |
+          |---|---|
+          | Guard \`lib.md\` | ${{ steps.guard_lib.outputs.achado == '1' && 'sim' || 'não' }} |
+          | CVEs Go | ${{ steps.govuln.outputs.achado == '1' && 'sim' || 'não' }} |
+          | CVEs npm | ${{ steps.npmaudit.outputs.achado == '1' && 'sim' || 'não' }} |
+          | Commit direto na main | ${{ steps.guard_main.outputs.achado == '1' && 'sim' || 'não' }} |
+
+          **Próximo passo:** acionar o agente \`security\` para o passe de julgamento — licença,
+          manutenção da biblioteca, ponto único de falha e decisão de atualizar (roles.md §6.6, §6.9).
+          A rotina relata; ela **não** decide e **não** atualiza.
+
+          _Atualizada automaticamente a cada execução com achado._
+          EOF
+          )
+          gh label create dependency-audit --color B60205 --description "Achados da auditoria semanal de dependências" --force
+          EXISTENTE=$(gh issue list --label dependency-audit --state open --json number --jq '.[0].number' 2>/dev/null || true)
+          if [ -n "$EXISTENTE" ] && [ "$EXISTENTE" != "null" ]; then
+            gh issue edit "$EXISTENTE" --body "$CORPO"
+            gh issue comment "$EXISTENTE" --body "Nova execução com achados: run ${{ github.run_id }}."
+            echo "issue #$EXISTENTE atualizada"
+          else
+            gh issue create --title "$TITULO" --body "$CORPO" --label dependency-audit
+          fi

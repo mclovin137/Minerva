@@ -1,5 +1,7 @@
 # Skill: gerar-prd
 
+**Autor:** Cristóvão Augusto
+
 **Definição canônica.** Adaptador de descoberta em `.claude/skills/gerar-prd/SKILL.md`, sem conteúdo próprio.
 
 ## Finalidade e responsabilidade

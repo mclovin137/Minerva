@@ -1,5 +1,7 @@
 # Skills do projeto Minerva
 
+**Autor:** Cristóvão Augusto
+
 ## Para o futuro agente
 
 Esta pasta contém as definições canônicas, independentes de ferramenta, das skills usadas no projeto Minerva. Os adaptadores específicos do Claude Code ficam em `.claude/skills/` e devem apenas apontar para estes arquivos.

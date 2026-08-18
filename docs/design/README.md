@@ -1,5 +1,7 @@
 # Design
 
+**Autor:** Cristóvão Augusto
+
 Direção visual e protótipos. Referência para PRDs de UI.
 
 Não há direção visual, requisito de interface ou épico de UI aprovado neste template. Esses elementos

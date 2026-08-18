@@ -1,5 +1,7 @@
 # Recursos opcionais do template
 
+**Autor:** Cristóvão Augusto
+
 ## Onboarding mínimo da sessão
 
 Este é o único recurso inevitável do template. Na primeira resposta da sessão, antes de usar

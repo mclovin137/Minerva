@@ -1,5 +1,7 @@
 # Skill: criar-migration
 
+**Autor:** Cristóvão Augusto
+
 **Definição canônica.** Adaptador de descoberta em `.claude/skills/criar-migration/SKILL.md`, sem conteúdo próprio.
 
 ## Para o futuro agente

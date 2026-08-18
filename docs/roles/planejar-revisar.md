@@ -7,6 +7,7 @@ tags:
   - role
   - planejar-revisar
 ai-first: true
+author: Cristóvão Augusto
 ---
 
 # Role — Planejar / revisar
@@ -40,7 +41,7 @@ Segunda das três responsabilidades da regra de ferro 4. Planejar e revisar são
 | Agente | Recorte |
 |---|---|
 | [yoda](../agentes/yoda.md) | Arquitetura — ADR, camadas, fronteiras de módulo, corte de escopo |
-| [ted-mosby](../agentes/ted-mosby.md) | QA — matriz de casos, idempotência, verificação da evidência |
+| [patrick-jane](../agentes/patrick-jane.md) | QA — matriz de casos, idempotência, verificação da evidência |
 | [neo](../agentes/neo.md) | Segurança — segredos, autenticação, validação de entrada, esteira, dependências |
 
 Três agentes, três recortes que não se sobrepõem. Um PR grande costuma passar pelos três, cada um emitindo o próprio parecer; **especialidade não é hierarquia**, e desacordo que não se resolve sobe para o usuário.

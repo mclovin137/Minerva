@@ -24,9 +24,9 @@ jobs:
           while IFS= read -r -d '' arquivo; do
             jq empty "$arquivo"
           done < <(find .claude .codex -type f -name '*.json' -print0)
-          jq -e '(.hooks.SessionStart[0].hooks | length == 1) and (.hooks.SessionStart[0].hooks[0].command | contains("onboarding-recursos-template.sh"))' .claude/settings.json >/dev/null
+          jq -e '.hooks.SessionStart == null' .claude/settings.json >/dev/null
           jq -e '.hooks.PreToolUse == null and .hooks.PostToolUse == null' .claude/settings.json >/dev/null
-          jq -e '(.hooks.SessionStart[0].hooks | length == 1) and (.hooks.SessionStart[0].hooks[0].command | contains("onboarding-recursos-template.sh"))' .codex/hooks.json >/dev/null
+          jq -e '.hooks.SessionStart == null' .codex/hooks.json >/dev/null
           jq -e '.hooks.PreToolUse == null and .hooks.PostToolUse == null' .codex/hooks.json >/dev/null
 
       - name: Validar sintaxe dos scripts shell
@@ -35,7 +35,15 @@ jobs:
           set -euo pipefail
           while IFS= read -r -d '' arquivo; do
             bash -n "$arquivo"
-          done < <(find .claude .codex -type f \( -name '*.sh' -o -name '*.bash' \) -print0)
+          done < <(find .claude .codex .github/scripts .githooks -type f \( -name '*.sh' -o -name '*.bash' -o -name 'pre-push' \) -print0)
+
+      - name: Validar guard e hook local versionado
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f .githooks/pre-push
+          grep -Fqx 'exec bash .github/scripts/validar-pipeline-local.sh' .githooks/pre-push
+          bash .github/scripts/guard-lib-md.sh
 
       - name: Validar paridade dos adaptadores
         shell: bash
@@ -54,7 +62,7 @@ jobs:
           for arquivo in docs/agentes/*.md; do
             nome="$(basename "$arquivo" .md)"
             [ "$nome" = 'README' ] && continue
-            [ "$nome" = 'homem-de-ferro' ] && continue
+            [ "$nome" = 'batman' ] && continue
             test -f ".claude/agents/$nome.md"
           done
           for arquivo in .claude/agents/*.md; do

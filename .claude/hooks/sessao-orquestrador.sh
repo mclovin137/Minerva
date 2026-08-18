@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# SessionStart — declara a sessão principal como Homem de Ferro, o Orquestrador
+# SessionStart — declara a sessão principal como Batman, o Orquestrador
 # do projeto Minerva.
 #
 # Adaptador (regra de ferro 1): não contém regra própria. Injeta no contexto da
-# sessão o conteúdo canônico de docs/agentes/homem-de-ferro.md.
+# sessão o conteúdo canônico de docs/agentes/batman.md.
 set -euo pipefail
 export PATH="$HOME/.local/bin:$PATH"
 
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-doc="$repo/docs/agentes/homem-de-ferro.md"
+doc="$repo/docs/agentes/batman.md"
 
 # Sem o documento canônico não há o que injetar. Sai em silêncio em vez de
 # inventar a regra aqui dentro.

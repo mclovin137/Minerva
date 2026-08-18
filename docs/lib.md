@@ -1,5 +1,7 @@
 # Dependências e serviços do projeto
 
+**Autor:** Cristóvão Augusto
+
 ## Para o futuro agente
 
 Inventário canônico de dependências, runtimes e serviços necessários para uma aplicação consumidora. O template não declara dependências de aplicação. Atualize este arquivo junto com qualquer manifesto ou lockfile; não escolha tecnologia por inferência.

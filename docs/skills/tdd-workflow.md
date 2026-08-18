@@ -1,5 +1,7 @@
 # Skill: tdd-workflow
 
+**Autor:** Cristóvão Augusto
+
 **Definição canônica e independente de ferramenta.** Adaptador de descoberta em `.claude/skills/tdd-workflow/SKILL.md`, sem conteúdo próprio.
 
 ## Para o futuro agente

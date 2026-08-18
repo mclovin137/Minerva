@@ -1,5 +1,7 @@
 # Tasks
 
+**Autor:** Cristóvão Augusto
+
 Tasks seguem o fluxo de `docs/rules.md`. A numeração formal começa em `T-001` quando uma task de produto for criada; este template não inventa backlog, contexto, fase ou branch.
 
 | # | Título | Classificação | Status |

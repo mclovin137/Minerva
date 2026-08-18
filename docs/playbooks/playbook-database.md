@@ -1,5 +1,7 @@
 # Playbook Database — problemas comuns de banco relacional e SQL
 
+**Autor:** Cristóvão Augusto
+
 > **Como usar**: referência de consulta seletiva do `backend-dev`. NÃO ler inteiro — o índice
 > mapeia gatilho → seção. Cada seção responde: onde o problema costuma aparecer, **como
 > identificar** (sintoma + ferramenta) e **como resolver** (com "qual opção quando").

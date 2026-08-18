@@ -1,5 +1,7 @@
 # Skill: api-design
 
+**Autor:** Cristóvão Augusto
+
 **Definição canônica e independente de ferramenta.** Adaptador de descoberta em `.claude/skills/api-design/SKILL.md`, sem conteúdo próprio.
 
 ## Para o futuro agente

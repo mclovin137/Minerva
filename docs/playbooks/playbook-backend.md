@@ -1,5 +1,7 @@
 # Playbook: Backend e padrões de sistema
 
+**Autor:** Cristóvão Augusto
+
 > Consulta seletiva. Use o índice gatilho para abrir somente a seção necessária. Este playbook é diagnóstico e decisório. As ADRs e o HLD são prescritivos. Anti-overengineering é o critério dominante.
 
 | # | Tópico | Consultar quando a task envolver… |

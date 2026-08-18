@@ -2,20 +2,7 @@
   "env": {
     "OBSIDIAN_SESSION_SUMMARY_ENABLED": "1"
   },
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "startup|resume|clear|compact",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/onboarding-recursos-template.sh\"",
-            "statusMessage": "Apresentando opções de recursos"
-          }
-        ]
-      }
-    ]
-  },
+  "hooks": {},
   "enabledPlugins": {
     "ui-ux-pro-max@ui-ux-pro-max-skill": false
   },

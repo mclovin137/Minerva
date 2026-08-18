@@ -1,5 +1,7 @@
 # Skill: gerar-fdd
 
+**Autor:** Cristóvão Augusto
+
 **Definição canônica.** Adaptador de descoberta em `.claude/skills/gerar-fdd/SKILL.md`, sem conteúdo próprio.
 
 ## Finalidade e responsabilidade

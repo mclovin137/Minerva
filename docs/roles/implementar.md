@@ -7,6 +7,7 @@ tags:
   - role
   - implementar
 ai-first: true
+author: Cristóvão Augusto
 ---
 
 # Role — Implementar

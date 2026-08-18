@@ -1,5 +1,7 @@
 # Skill: deployment-patterns
 
+**Autor:** Cristóvão Augusto
+
 **Definição canônica e independente de ferramenta.** Adaptador de descoberta em `.claude/skills/deployment-patterns/SKILL.md`, sem conteúdo próprio.
 
 ## Para o futuro agente

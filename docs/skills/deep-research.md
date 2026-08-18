@@ -1,5 +1,7 @@
 # Skill: deep-research
 
+**Autor:** Cristóvão Augusto
+
 **Definição canônica.** Adaptador de descoberta em `.claude/skills/deep-research/SKILL.md`, sem conteúdo próprio.
 
 ## Finalidade e responsabilidade
