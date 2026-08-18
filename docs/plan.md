@@ -14,9 +14,9 @@ Publicar o bootstrap de governança do template no repositório GitHub vazio `mc
 
 - Objetivo: versionar e publicar o estado atual de governança em remoto vazio, com controles de segredo e permissões antes do commit.
 - Decisão: o usuário confirmou que o remoto está vazio, que é titular do conteúdo originário de TGM2 e autorizou, exclusivamente para o bootstrap, commit direto em `main` sem PR e sem revisão independente. Próximos trabalhos retornam ao fluxo normal de branch e PR.
-- Evidências: remoto confirmado vazio por `git ls-remote`; revisão de segurança aplicada a `.gitignore`, permissões e varredura de segredos; validações completas serão reexecutadas antes do commit e o resultado do push será registrado depois.
-- Riscos e lacunas: a exceção elimina a revisão independente apenas porque não há base para PR no remoto vazio; conteúdo, segredos, permissões, origem e estado limpo serão conferidos antes do push. CI não será declarada verde sem consulta posterior.
-- Próximo passo: validar a árvore, inicializar Git, criar o commit inicial em `main`, fazer push sem força e registrar resultados reais.
+- Evidências: remoto vazio confirmado por `git ls-remote`; revisão de segurança aplicada a `.gitignore`, permissões e varredura de segredos; `git diff --cached --check` passou; commit raiz `3553497ac1a82f7bded87c73978831e5c58fdb48` foi enviado sem força para `origin/main`; HEAD, origem e estado limpo foram confirmados após o push; GitHub Actions concluiu com sucesso: `Validar template` — https://github.com/mclovin137/Minerva/actions/runs/32166131075.
+- Riscos e lacunas: a exceção eliminou a revisão independente apenas porque não havia base para PR no remoto vazio. Essa exceção está encerrada; próximos trabalhos exigem branch e PR. Não há roadmap de produto aprovado.
+- Próximo passo: criar toda mudança futura em branch própria, atualizar a documentação aplicável e abrir PR para revisão independente.
 
 ## Limites
 

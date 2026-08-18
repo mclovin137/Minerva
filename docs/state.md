@@ -8,9 +8,9 @@ O repositório permanece um template agnóstico de tecnologia. A task ativa publ
 
 - Objetivo: publicar o bootstrap autorizado sem expor segredos ou levar estado local ao repositório.
 - Decisão: o usuário autorizou excepcionalmente commit direto em `main`, sem PR/revisão independente, porque o remoto está vazio; a exceção resolve esse trade-off somente para o bootstrap. Próximas mudanças exigem branch e PR.
-- Evidências: remoto vazio confirmado por `git ls-remote`; `.gitignore`, permissões, lista de arquivos e varredura de segredos serão conferidos antes do commit. Push, HEAD, origem, estado e CI serão registrados após ocorrerem.
-- Riscos e lacunas: CI pode ficar pendente ou falhar; nenhum resultado remoto será antecipado. Não há roadmap de produto aprovado.
-- Próximo passo: inicializar Git após validar a árvore, publicar `main` sem força e consultar a execução do GitHub Actions.
+- Evidências: remoto vazio confirmado por `git ls-remote`; `.gitignore`, permissões, lista de arquivos e varredura de segredos foram conferidos; `git diff --cached --check` passou; commit raiz `3553497ac1a82f7bded87c73978831e5c58fdb48` foi publicado sem força em `origin/main`; HEAD, origem e estado limpo foram confirmados após o push; GitHub Actions concluiu com sucesso: `Validar template` — https://github.com/mclovin137/Minerva/actions/runs/32166131075.
+- Riscos e lacunas: a exceção de bootstrap está encerrada; próximos trabalhos exigem branch e PR. Não há roadmap de produto aprovado.
+- Próximo passo: iniciar o próximo trabalho somente em branch própria e submetê-lo a revisão independente por PR.
 
 ## Fundações vigentes
 
