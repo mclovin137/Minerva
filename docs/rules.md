@@ -400,10 +400,12 @@ Ambos são condição de merge. Publicação e deploy continuam sujeitos à regr
 | `CLAUDE.md` | Claude Code | `docs/rules.md` | Ponteiro canônico + regra de idioma + autorização permanente de delegação |
 | `AGENTS.md` | Codex e demais agentes | `docs/rules.md` | Ponteiro canônico + regra de idioma + autorização permanente de delegação |
 | `.claude/skills/<skill>/SKILL.md` | Claude Code | `docs/skills/<skill>.md` | Frontmatter de descoberta + ponteiro |
-| `.claude/agents/<agente>.md` | Claude Code | `docs/agentes/<agente>.md` | Frontmatter de despacho (`model`, `effort`, `tools`) + ponteiro |
+| `.claude/agents/<agente>.md` | Claude Code | `docs/agentes/<agente>.md` | Frontmatter de despacho (`model`, `effort`, `tools`) + ponteiro + enquadramento imperativo de despacho, quando a encarnação exigir: como acionar a encarnação primária, quando cair para a alternativa e o que anunciar ao cair |
 | Hooks de sessão, guarda e continuidade | Claude Code e Codex | suas definições canônicas | Versionados e validados, mas disponíveis e inativos até configuração futura autorizada pelo usuário |
 
 Definição canônica de skill: `docs/skills/`. Fica no repositório, e não na base Obsidian, para que um agente trabalhando no código consiga lê-la sem depender de acesso à base. A base documenta que a skill existe (gatilho da regra 3); o repositório guarda a definição executável.
+
+O enquadramento imperativo de despacho existe porque o corpo do adaptador é o que vira o system prompt do subagente: instrução de acionamento escondida no `description` é lida por quem despacha, não por quem executa. Esse enquadramento diz **como acionar** o que o canônico já decidiu — nunca cria, altera ou remove regra, responsabilidade, recusa ou escolha de encarnação, que continuam sendo exclusividade do canônico (regra de ferro 1). Parâmetros voláteis, como a linha de comando da encarnação primária, ficam no canônico e são referenciados pelo adaptador, não copiados.
 
 Ao adicionar suporte a uma nova ferramenta, cria-se **mais um adaptador ponteiro** — nunca uma cópia do conteúdo. A regra de idioma (regra 2) e a autorização permanente de delegação são repetidas inline nos adaptadores de propósito. Configurar automação de ciclo de vida exige autorização explícita do usuário; nenhum hook é registrado ou reconfigurado por conversa.
 

@@ -25,6 +25,7 @@ As alterações de governança, agentes, hooks, playbook e task continuam penden
 | Autoria declarada, agentes e skills renomeados nesta sessão | notas correspondentes de agentes e skills na base Minerva | Severino | 2026-08-19T23:59:59-03:00 | pendente de sincronização e conferência |
 | `.githooks/pre-push` e `.github/scripts/validar-pipeline-local.sh` | `tasks/t-0064-auditoria-semanal-de-dependencias-e-higiene.md` | Severino | 2026-08-19T23:59:59-03:00 | pendente de sincronização e conferência |
 | Remoção do contrato de onboarding opt-in (documento canônico, hooks e regra de ferro 11), autorização permanente de delegação a subagentes e diagnóstico do smoke de hooks | `regras-de-ferro.md`, `governanca/hooks-onboarding-inativos.md`, `agentes/batman.md`, `roles/orquestrar.md` e notas de skills afetadas | Severino | 2026-08-19T23:59:59-03:00 | pendente de sincronização e conferência |
+| Fallback anunciado do Severino para Claude Sonnet medium, enquadramento imperativo em `.claude/agents/severino.md` e nova permissão de conteúdo para adaptadores de agente em `docs/rules.md` | `agentes/severino.md`, `regras-de-ferro.md`, nota de governança do template | Severino | 2026-08-19T23:59:59-03:00 | pendente de sincronização e conferência |
 
 ## Próximo passo
 
