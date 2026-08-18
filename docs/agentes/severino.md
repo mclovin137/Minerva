@@ -20,18 +20,41 @@ Severino é responsável por todo o código da aplicação: back-end, front-end,
 | Campo | Valor |
 |---|---|
 | Encarnação primária | Codex — `gpt-5.6-luna` |
-| Encarnação alternativa | **nenhuma declarada** |
-| Esforço | medium (`-c model_reasoning_effort=medium`) |
+| Encarnação alternativa | Claude — Sonnet, esforço medium (fallback anunciado; ver `## Como é executado`) |
+| Esforço | medium (`-c model_reasoning_effort=medium` no Codex; `effort: medium` no fallback Claude) |
 | Sandbox | `workspace-write` acrescido da base Obsidian (`Bases/Minerva`) como única raiz gravável adicional |
 
 **Por quê:** implementação chega com escopo fechado pela task e arquitetura já decidida pelo Yoda — o trabalho é executar bem o que já foi resolvido, não resolver de novo.
 
 **Por quê o sandbox tem uma raiz extra:** a regra de ferro 3 exige registrar imediatamente a pendência documental e sincronizar a base Obsidian em até 24 horas, ou antes por pedido do usuário; a base fica fora do repositório. `workspace-write` sozinho restringe a escrita ao workspace e bloquearia essa obrigação quando a sincronização for executada. A liberação é exclusiva do caminho `/mnt/c/Users/mclov/OneDrive/Documentos/Obsidian Vault/mclov/Documents/SecondBrain/Bases/Minerva` — não o vault inteiro, não `SecondBrain`, não `Bases` (a pasta irmã `Bases/Freya` pertence a outro projeto e permanece inacessível). O modo de sandbox continua `workspace-write`; nenhuma flag de bypass foi introduzida.
 
-Severino é o único agente **só Codex**, por decisão explícita do usuário. Se o Codex estiver indisponível, o agente **falha e avisa**: não existe queda automática para um modelo Claude, porque isso trocaria a encarnação escolhida pelo usuário sem autorização dele.
+Severino tem **encarnação primária no Codex e fallback declarado para Claude Sonnet com esforço medium**, por decisão explícita do usuário. O fallback dispara em um único caso: Codex indisponível ou falha na chamada. Fora dessa condição, trocar de encarnação é proibido.
+
+O fallback é **sempre anunciado** — no relatório ao orquestrador, na mensagem de commit e no corpo do PR. O anúncio informa que o Codex caiu, qual foi o erro observado e que a execução seguiu por Claude. A autorização do fallback cobre **a substituição da encarnação, nunca o silêncio sobre ela**: atribuir ao Codex trabalho executado por Claude é falsificação de autoria e está proibido, mesmo quando a substituição em si era legítima.
 
 Escolha do usuário, registrada aqui por ser a definição canônica. Adaptador: `.claude/agents/severino.md`.
 
+## Como é executado
+
+Ao ser despachado, o adaptador lê esta definição e repassa a demanda **integral** ao Codex em uma
+única chamada `Bash`, com o comando abaixo:
+
+```bash
+codex exec -m gpt-5.6-luna -c model_reasoning_effort=medium -s workspace-write \
+  -c 'sandbox_workspace_write.writable_roots=["/mnt/c/Users/mclov/OneDrive/Documentos/Obsidian Vault/mclov/Documents/SecondBrain/Bases/Minerva"]'
+```
+
+A saída do Codex é devolvida como veio, sem resumo, comentário ou análise do encaminhador.
+
+**Condição exata do fallback:** o Codex está indisponível (binário ausente, sem autenticação, limite
+de uso excedido, rede inacessível) **ou** a chamada retorna código de saída diferente de zero. Só
+nesse caso o adaptador implementa a demanda ele mesmo, na encarnação Claude Sonnet com esforço
+medium. Qualquer outro motivo para não encaminhar — pressa, tarefa parecer simples, preferência do
+encaminhador — não autoriza o fallback.
+
+**Obrigação de anunciar:** antes de implementar pelo fallback, o agente declara explicitamente que o
+Codex caiu e qual foi o erro. Esse anúncio se repete no relatório final, na mensagem de commit e no
+corpo do PR. Fallback silencioso é violação, ainda que a queda do Codex fosse real.
 
 ## Escopo
 
@@ -124,4 +147,5 @@ Linguagem, framework, build, layout de diretório, comandos de teste, persistên
 
 ## Histórico
 
+- 2026-08-18: encaminhamento ao Codex passou a ser instrução imperativa no corpo do adaptador (antes vivia só no `description` do frontmatter, que o subagente não lê como comando) e ganhou a seção `## Como é executado` aqui. A encarnação alternativa deixou de ser "nenhuma declarada" e passou a Claude Sonnet medium, como fallback restrito a Codex indisponível ou falha na chamada, sempre anunciado.
 - 2026-08-18: adaptador do Codex ganhou `-c sandbox_workspace_write.writable_roots` apontando exclusivamente para `Bases/Minerva`, corrigindo a contradição entre `workspace-write` e a obrigação da regra de ferro 3 de escrever na base Obsidian, fora do repositório.
