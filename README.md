@@ -4,17 +4,17 @@ Minerva é um template para desenvolvimento assistido por IA, agnóstico de tecn
 
 ## Comece por aqui
 
-Na primeira resposta, escolha os recursos opcionais conforme [recursos do template](docs/recursos-template.md). Depois de habilitar documentos de governança, [docs/rules.md](docs/rules.md) é a fonte canônica e os três artefatos de continuidade aplicáveis são:
+[docs/rules.md](docs/rules.md) é a fonte canônica e os três artefatos de continuidade são:
 
 - [rules](docs/rules.md): contrato, regras e fluxo.
 - [continuidade](docs/continuidade.md): task, plano, estado observado, decisões e pendências documentais.
 - [lib](docs/lib.md): inventário de dependências e serviços.
 
-Após o opt-in correspondente, as responsabilidades são separadas para evitar autoaprovação: orquestrar, planejar/revisar e implementar. O catálogo canônico está em [docs/agentes](docs/agentes/README.md), incluindo o `c4-diagram-generator`, que gera apenas diagramas C4 fundamentados em FDD aprovado. As skills canônicas estão em [docs/skills](docs/skills/README.md).
+As responsabilidades são separadas para evitar autoaprovação: orquestrar, planejar/revisar e implementar. O catálogo canônico está em [docs/agentes](docs/agentes/README.md), incluindo o `c4-diagram-generator`, que gera apenas diagramas C4 fundamentados em FDD aprovado. As skills canônicas estão em [docs/skills](docs/skills/README.md).
 
 ## Fluxo
 
-Depois do opt-in para documentos de governança, ajuste básico ou urgente sem gatilho documental e fora das exclusões da regra 9 só pode seguir a exceção enxuta após autorização explícita do usuário para aquela mudança: branch nova, PR, validação proporcional e revisão independente. A IA apenas apresenta a possibilidade, o escopo, os controles mantidos e a documentação dispensada; nunca inicia esse caminho por conta própria. Mudança documental, de governança, adaptador ou automação mecânica sem comportamento de produto segue a via rápida: task delimitada, validação proporcional e revisão independente. Feature ou mudança estrutural segue o fluxo completo: roadmap, épico, PRD, HLD quando estrutural, FDD quando aplicável, task, implementação, auditoria e merge. Conflito material entre regras para e volta ao usuário com alternativas e trade-offs. Os gates e gatilhos estão em [docs/rules.md](docs/rules.md).
+Ajuste básico ou urgente sem gatilho documental e fora das exclusões da regra 9 só pode seguir a exceção enxuta após autorização explícita do usuário para aquela mudança: branch nova, PR, validação proporcional e revisão independente. A IA apenas apresenta a possibilidade, o escopo, os controles mantidos e a documentação dispensada; nunca inicia esse caminho por conta própria. Mudança documental, de governança, adaptador ou automação mecânica sem comportamento de produto segue a via rápida: task delimitada, validação proporcional e revisão independente. Feature ou mudança estrutural segue o fluxo completo: roadmap, épico, PRD, HLD quando estrutural, FDD quando aplicável, task, implementação, auditoria e merge. Conflito material entre regras para e volta ao usuário com alternativas e trade-offs. Os gates e gatilhos estão em [docs/rules.md](docs/rules.md).
 
 Os índices de [HLDs](docs/hlds/README.md) e [FDDs](docs/fdds/README.md) listam apenas documentos que existirem; não representam backlog nem decisões implícitas.
 

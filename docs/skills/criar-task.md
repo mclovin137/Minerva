@@ -8,7 +8,7 @@
 
 Derivar uma unidade executável do fluxo completo ou uma task curta da via rápida, sempre com escopo fechado, dono implementador, validações, evidências e revisão independente. A task traduz especificação aprovada ou manutenção delimitada em trabalho verificável; não cria requisito de negócio nem decisão arquitetural.
 
-Use esta skill somente depois de o usuário habilitar skills; se a task recorrer a agentes ou documentos, explique e obtenha também o opt-in dessas dependências.
+Se a task recorrer a agentes ou documentos, explique as dependências antes de usá-las.
 
 ## Responsabilidade e limites
 

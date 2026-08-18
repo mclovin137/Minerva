@@ -14,7 +14,7 @@ Regra nova, mudança ou remoção de regra: **acontece aqui**, nunca em um adapt
 
 ## Estado e continuidade
 
-Os três artefatos de continuidade vivem em `docs/`, ao lado deste documento: o contrato canônico é [`docs/rules.md`](rules.md); a continuidade operacional da task ativa vive em [`docs/continuidade.md`](continuidade.md); e o inventário de dependências vive em [`docs/lib.md`](lib.md). Após o opt-in para documentos de governança, leia os três antes de retomar uma task.
+Os três artefatos de continuidade vivem em `docs/`, ao lado deste documento: o contrato canônico é [`docs/rules.md`](rules.md); a continuidade operacional da task ativa vive em [`docs/continuidade.md`](continuidade.md); e o inventário de dependências vive em [`docs/lib.md`](lib.md). Leia os três antes de retomar uma task.
 
 **A raiz do repositório não hospeda nenhum deles.** `docs/` é o caminho canônico. Caminho de raiz para esses arquivos é erro, não variante aceitável. A referência anterior a ADRs de continuidade pertence ao histórico externo e não é dependência deste template limpo.
 
@@ -36,7 +36,7 @@ Não negociáveis. Qualquer proposta que viole uma delas deve ser recusada e sub
 8. **Dois pipelines de CI/CD:** um de review e um de execução dos casos de teste. Ver seção *CI/CD*.
 9. **Exceção enxuta para ajuste básico ou urgente.** Só pode dispensar task e documentação formal com autorização explícita do usuário para aquela mudança e nas condições da seção *Fluxo de trabalho → Exceção enxuta*. Branch nova, PR, revisão independente e segurança continuam obrigatórios.
 10. **Conflito material entre regras exige decisão do usuário.** Quando regras de ferro — ou seus efeitos — colidirem materialmente, o agente para e apresenta trade-offs, alternativas, impacto e a regra excepcional ao usuário; nunca escolhe silenciosamente.
-11. **Documentos e skills exigem opt-in item a item.** Somente documentos e skills são selecionáveis na sessão; o onboarding mínimo de [`docs/recursos-template.md`](recursos-template.md) apresenta seus itens antes de qualquer uso. Agentes seguem a responsabilidade e os gatilhos canônicos; hooks seguem a configuração versionada e o suporte da ferramenta, sem escolha conversacional. A escolha de documentos e skills vale para a sessão, aceita seleção parcial e pode mudar a qualquer momento. Dependências são explicadas antes da ativação, e nada é habilitado silenciosamente.
+
 ---
 
 ## Escopo da regra 5
@@ -63,6 +63,8 @@ Os agentes concretos estão definidos em `docs/agentes/`: **Batman** (orquestrar
 - **Não altera, não cria e não apaga nenhum arquivo** — inclusive por shell (`>`, `rm`, `mv`, `sed -i`, mutações de git). Toda escrita acontece dentro de um agente delegado; não existe mudança pequena demais para delegar.
 - **Não escreve código de produção e não aprova PR.**
 
+**Delegação permanentemente autorizada.** O usuário autoriza, de forma permanente e para toda sessão, que a sessão principal despache subagentes conforme os gatilhos e responsabilidades canônicos, sem confirmação caso a caso. A autorização cobre apenas o despacho: não dispensa regra de ferro, gate, revisão independente nem qualquer autorização específica exigida por outra regra.
+
 **Planejador / Revisor**
 - Escreve roadmap, épicos, PRDs e a quebra em tasks.
 - Faz a **auditoria** do PR: aderência ao PRD, às regras de ferro, cobertura de testes e evidências.
@@ -73,7 +75,7 @@ Os agentes concretos estão definidos em `docs/agentes/`: **Batman** (orquestrar
 - Abre o PR e responde ao review.
 - **Não aprova nem faz merge do próprio PR.**
 
-Definições de agentes, roles e skills são markdown neutro, versionado no repositório, consumível por qualquer ferramenta (regra 1). Skills exigem o opt-in da regra 11; agentes são acionados pelos gatilhos e responsabilidades desta regra. Toda criação/edição/remoção de agente, role ou skill exige atualização do Obsidian quando documentos de governança estiverem habilitados (regra 3).
+Definições de agentes, roles e skills são markdown neutro, versionado no repositório, consumível por qualquer ferramenta (regra 1). Skills são usadas conforme seus próprios contratos e gatilhos; agentes são acionados pelos gatilhos e responsabilidades desta regra. Toda criação/edição/remoção de agente, role ou skill exige atualização do Obsidian (regra 3).
 
 ### Catálogo de agentes
 
@@ -395,17 +397,15 @@ Ambos são condição de merge. Publicação e deploy continuam sujeitos à regr
 
 | Arquivo | Ferramenta | Aponta para | Conteúdo permitido |
 |---|---|---|---|
-| `CLAUDE.md` | Claude Code | `docs/recursos-template.md`, depois `docs/rules.md` se habilitado | Ponteiro de onboarding + regra de idioma |
-| `AGENTS.md` | Codex e demais agentes | `docs/recursos-template.md`, depois `docs/rules.md` se habilitado | Ponteiro de onboarding + regra de idioma |
+| `CLAUDE.md` | Claude Code | `docs/rules.md` | Ponteiro canônico + regra de idioma + autorização permanente de delegação |
+| `AGENTS.md` | Codex e demais agentes | `docs/rules.md` | Ponteiro canônico + regra de idioma + autorização permanente de delegação |
 | `.claude/skills/<skill>/SKILL.md` | Claude Code | `docs/skills/<skill>.md` | Frontmatter de descoberta + ponteiro |
 | `.claude/agents/<agente>.md` | Claude Code | `docs/agentes/<agente>.md` | Frontmatter de despacho (`model`, `effort`, `tools`) + ponteiro |
-| `.claude/hooks/onboarding-recursos-template.sh` | Claude Code | `docs/recursos-template.md` | Versionado e inativo; pode apresentar a pergunta de opt-in somente após configuração futura autorizada pelo usuário |
-| `.codex/hooks/onboarding-recursos-template.sh` | Codex | `docs/recursos-template.md` | Versionado e inativo; pode apresentar a pergunta de opt-in somente após configuração futura autorizada pelo usuário |
-| Hooks de sessão, guarda e continuidade restantes | Claude Code e Codex | suas definições canônicas | Versionados e validados, mas disponíveis e inativos até configuração futura autorizada pelo usuário |
+| Hooks de sessão, guarda e continuidade | Claude Code e Codex | suas definições canônicas | Versionados e validados, mas disponíveis e inativos até configuração futura autorizada pelo usuário |
 
 Definição canônica de skill: `docs/skills/`. Fica no repositório, e não na base Obsidian, para que um agente trabalhando no código consiga lê-la sem depender de acesso à base. A base documenta que a skill existe (gatilho da regra 3); o repositório guarda a definição executável.
 
-Ao adicionar suporte a uma nova ferramenta, cria-se **mais um adaptador ponteiro** — nunca uma cópia do conteúdo. A regra de idioma (regra 2) é repetida inline nos adaptadores de propósito. Configurar automação de ciclo de vida exige autorização explícita do usuário; a escolha conversacional não reconfigura hooks por si só.
+Ao adicionar suporte a uma nova ferramenta, cria-se **mais um adaptador ponteiro** — nunca uma cópia do conteúdo. A regra de idioma (regra 2) e a autorização permanente de delegação são repetidas inline nos adaptadores de propósito. Configurar automação de ciclo de vida exige autorização explícita do usuário; nenhum hook é registrado ou reconfigurado por conversa.
 
 ## Catálogo de skills
 
