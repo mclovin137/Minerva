@@ -18,6 +18,7 @@
 
 - `git diff --check`, `bash -n` dos hooks, `jq empty .codex/hooks.json` e smoke dos hooks de onboarding passaram.
 - O playbook de backend preserva as seções A, A.1, B, C, D e E; suas referências diretas a Go foram removidas.
+- O workflow de validação foi alinhado ao contrato atual do onboarding e verifica pergunta, lista de documentos, lista de skills e exclusão de agentes e hooks como opções.
 
 ## Pendências de sincronização Obsidian
 
@@ -25,7 +26,7 @@ As alterações de governança, agentes, hooks, playbook e task continuam penden
 
 | Origem no repositório | Destino na base Minerva | Responsável | Prazo | Situação |
 |---|---|---|---|---|
-| `docs/rules.md`, `docs/recursos-template.md`, `AGENTS.md`, `CLAUDE.md`, hooks e configuração do Codex/Claude | `regras-de-ferro.md`, nota de governança para onboarding | Severino | 2026-08-19T23:59:59-03:00 | pendente de sincronização e conferência |
+| `docs/rules.md`, `docs/recursos-template.md`, `AGENTS.md`, `CLAUDE.md`, hooks, configuração do Codex/Claude e workflow de validação | `regras-de-ferro.md`, nota de governança para onboarding | Severino | 2026-08-19T23:59:59-03:00 | pendente de sincronização e conferência |
 | `docs/agentes/neo.md`, `docs/agentes/severino.md` | `agentes/neo.md`, `agentes/severino.md` | Severino | 2026-08-19T23:59:59-03:00 | pendente de sincronização e conferência |
 | `docs/playbooks/playbook-backend.md` | `playbooks/playbook-backend.md` | Severino | 2026-08-19T23:59:59-03:00 | pendente de sincronização e conferência |
 | Escopo e estado desta task | `tasks/t-002-governanca-controles-e-c4.md` | Severino | 2026-08-19T23:59:59-03:00 | pendente de sincronização e conferência |

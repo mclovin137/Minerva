@@ -89,14 +89,20 @@ jobs:
               exit 1
             fi
           }
+          validar_onboarding() {
+            grep -Fq 'Quais documentos e skills do template você quer habilitar nesta sessão?' "$temporario/saida"
+            grep -Fq 'Documentos disponíveis:' "$temporario/saida"
+            grep -Fq 'Skills disponíveis:' "$temporario/saida"
+            grep -Fq 'Agentes e hooks seguem seus contratos e a configuração versionada; não são opções de escolha.' "$temporario/saida"
+          }
           executar 'Claude guarda' bash .claude/hooks/guarda-orquestrador.sh
           executar 'Codex guarda' bash .codex/hooks/guarda-orquestrador.sh
           executar 'Claude sessão' bash .claude/hooks/sessao-orquestrador.sh
           executar 'Codex sessão' bash .codex/hooks/sessao-orquestrador.sh
           executar 'Claude onboarding' bash .claude/hooks/onboarding-recursos-template.sh
-          grep -Fq 'Quais recursos do template você quer usar nesta sessão?' "$temporario/saida"
+          validar_onboarding
           executar 'Codex onboarding' bash .codex/hooks/onboarding-recursos-template.sh
-          grep -Fq 'Quais recursos do template você quer usar nesta sessão?' "$temporario/saida"
+          validar_onboarding
           cp -a . "$temporario/repo"
           executar 'Claude continuidade init' bash "$temporario/repo/.claude/hooks/sincronizar-continuidade.sh" init
           executar 'Claude continuidade sync' bash "$temporario/repo/.claude/hooks/sincronizar-continuidade.sh" sync
