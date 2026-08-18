@@ -4,7 +4,7 @@
 
 - Task: ajustes de governança, playbook de backend, onboarding e documentação de design.
 - Classificação: via rápida de governança; não há mudança de produto, dependência ou infraestrutura.
-- Situação: implementação e validações locais concluídas; commit e push pendentes.
+- Situação: implementação, validações, commit e push concluídos; revisão independente e sincronização Obsidian pendentes.
 - Branch observada: `main`.
 
 ## Decisões vigentes
@@ -32,4 +32,4 @@ As alterações de governança, agentes, hooks, playbook e task continuam penden
 
 ## Próximo passo
 
-Enviar o commit desta mudança, realizar revisão independente e sincronizar as pendências acima antes do prazo.
+Realizar revisão independente e sincronizar as pendências acima antes do prazo.
