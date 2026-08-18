@@ -1,0 +1,346 @@
+# Roles e regras do projeto Minerva
+
+**Documento canônico e independente de ferramenta.** É a fonte da verdade sobre como este projeto é operado por qualquer IA (Claude Code, Codex, outras) e por qualquer pessoa. Arquivos como `CLAUDE.md` e `AGENTS.md` são adaptadores finos que apontam para cá e não contêm regras próprias.
+
+Regra nova, mudança ou remoção de regra: **acontece aqui**, nunca em um adaptador.
+
+---
+
+## Idioma
+
+**Todo output gerado por qualquer LM neste projeto deve ser em pt-BR.** Isso inclui: respostas ao usuário, mensagens de commit, descrições de PR, comentários de review, documentação, notas do Obsidian, ADRs, PRDs, nomes de tasks e mensagens de erro autorais. Identificadores de código (classes, funções, variáveis), termos técnicos consagrados e saídas de ferramentas de terceiros permanecem como estão.
+
+## Estado e continuidade
+
+Os quatro artefatos de continuidade vivem em `docs/`, ao lado deste documento: o contrato canônico é [`docs/rules.md`](rules.md); o planejamento operacional da task ativa vive em [`docs/plan.md`](plan.md); o estado observado do repositório vive em [`docs/state.md`](state.md); e o inventário de dependências vive em [`docs/lib.md`](lib.md). Leia os quatro no início de qualquer sessão e antes de retomar uma task.
+
+**A raiz do repositório não hospeda nenhum deles.** `docs/` é o caminho canônico. Caminho de raiz para esses arquivos é erro, não variante aceitável. A referência anterior a ADRs de continuidade pertence ao histórico externo e não é dependência deste template limpo.
+
+Agentes autorizados atualizam semanticamente `docs/plan.md` e `docs/state.md`. O hook de uma ferramenta pode atualizar somente as seções delimitadas como geradas, sem inferir conclusão, alterar checklist ou substituir julgamento. Ferramentas sem adaptador equivalente registram as mutações manualmente antes de entregar. `docs/lib.md` nunca é atualizado pelo hook: toda dependência exige versão e finalidade verificadas por um agente.
+
+---
+
+## Regras de ferro
+
+Não negociáveis. Qualquer proposta que viole uma delas deve ser recusada e substituída por alternativa conforme.
+
+1. **Multi-agente e independente de ferramenta.** O projeto é operado por múltiplas IAs (Claude Code, Codex e outras). Skills, agentes e roles são definidos em markdown neutro, sem depender de recursos exclusivos de um fornecedor. Arquivos específicos de ferramenta (`CLAUDE.md`, `AGENTS.md`, `.codex/`, etc.) são **adaptadores finos** que apontam para a definição canônica — nunca a fonte da verdade.
+2. **Output em pt-BR.** Ver seção *Idioma*.
+3. **Obsidian é a documentação oficial.** Ver seção *Documentação no Obsidian*.
+4. **Três responsabilidades de agente:** orquestrar, planejar/revisar, implementar. Ver seção *Arquitetura de agentes*.
+5. **Custo financeiro zero.** Nenhuma dependência, serviço, hospedagem, runner ou ferramenta paga. Só free tier permanente ou open source self-hosted sem custo. Se a única solução viável para um problema for paga, o problema volta para decisão do usuário — não se contrata nada. Ver seção *Escopo da regra 5*.
+6. **Sistema no ar desde o primeiro commit.** O commit inicial já entrega aplicação publicada e acessível. Infraestrutura, pipeline e deploy fazem parte do primeiro entregável, não de uma fase posterior.
+7. **DDD + teste de integração em todo endpoint.** Ver seção *Arquitetura e testes*.
+8. **Dois pipelines de CI/CD:** um de review e um de execução dos casos de teste. Ver seção *CI/CD*.
+9. **Exceção enxuta para ajuste básico ou urgente.** Só pode dispensar task e documentação formal com autorização explícita do usuário para aquela mudança e nas condições da seção *Fluxo de trabalho → Exceção enxuta*. Branch nova, PR, revisão independente e segurança continuam obrigatórios.
+10. **Conflito material entre regras exige decisão do usuário.** Quando regras de ferro — ou seus efeitos — colidirem materialmente, o agente para e apresenta trade-offs, alternativas, impacto e a regra excepcional ao usuário; nunca escolhe silenciosamente.
+---
+
+## Escopo da regra 5
+
+A regra 5 rege **o que o projeto contrata**: dependência, biblioteca, hospedagem, banco de dados, runner de CI, serviço externo, domínio, e qualquer coisa que o sistema precise para existir ou rodar. Tudo isso é free tier permanente ou open source self-hosted sem custo. Solução paga não é adotada por conta própria: volta como decisão do usuário.
+
+A regra 5 **não rege as ferramentas de IA que operam o projeto**. As assinaturas do Claude Code e do Codex/ChatGPT são **custo previsto e aceito pelo usuário**, fora do escopo da regra: são ferramenta de trabalho dele, já existiam antes do projeto e continuariam existindo sem ele.
+
+Consequência prática, para não haver dúvida em auditoria: escolher `opus`, `gpt-5.6-agua`, `gpt-5.6-luna` ou qualquer modelo dentro dessas assinaturas **não viola a regra 5**. Os modelos de cada agente estão em `docs/agentes/` e são escolha do usuário.
+
+A fronteira é a pergunta: *quem paga a conta e por quê?* Se o custo nasce de uma escolha do projeto e entra na infraestrutura do sistema, a regra 5 vale. Se é a ferramenta com que o usuário trabalha, não vale — e continuar cobrando custo zero aí só levaria a operar pior sem economizar nada.
+
+---
+
+## Arquitetura de agentes
+
+Toda atividade pertence a exatamente uma das três responsabilidades. A separação existe para que nenhum agente aprove o próprio trabalho.
+
+Os agentes concretos estão definidos em `docs/agentes/`: **Homem de Ferro** (orquestrar), **Yoda** (arquitetura), **Severino** (todo o código da aplicação), **Ted Mosby** (QA), **Neo** (segurança), **Jarvis** (SRE) e **c4-diagram-generator** (diagramas C4).
+
+**Orquestrador — é sempre a sessão principal (Homem de Ferro)**
+- Interpreta a demanda, localiza a posição dela no fluxo (ver *Fluxo de trabalho*) e delega ao agente certo.
+- Mantém estado: o que está em andamento, o que está bloqueado, o que aguarda auditoria.
+- **Não altera, não cria e não apaga nenhum arquivo** — inclusive por shell (`>`, `rm`, `mv`, `sed -i`, mutações de git). Toda escrita acontece dentro de um agente delegado; não existe mudança pequena demais para delegar.
+- **Não escreve código de produção e não aprova PR.**
+
+**Planejador / Revisor**
+- Escreve roadmap, épicos, PRDs e a quebra em tasks.
+- Faz a **auditoria** do PR: aderência ao PRD, às regras de ferro, cobertura de testes e evidências.
+- **Não implementa a task que ele mesmo planejou** quando houver agente disponível para implementar.
+
+**Implementador**
+- Implementa a task, escreve os testes e produz as evidências.
+- Abre o PR e responde ao review.
+- **Não aprova nem faz merge do próprio PR.**
+
+Definições de agentes, roles e skills são markdown neutro, versionado no repositório, consumível por qualquer ferramenta (regra 1). Toda criação/edição/remoção de agente, role ou skill exige atualização do Obsidian (regra 3).
+
+### Catálogo de agentes
+
+| Agente | Responsabilidade | Escopo principal |
+|---|---|---|
+| [Homem de Ferro](agentes/homem-de-ferro.md) | Orquestrar | Interpreta, localiza a etapa, delega e acompanha; não escreve arquivos |
+| [Yoda](agentes/yoda.md) | Planejar/revisar | Arquitetura, HLD, ADR, trade-offs e conformidade arquitetural |
+| [Severino](agentes/severino.md) | Implementar | Todo o código da aplicação, migrations, pipeline-as-code e documentação associada |
+| [Ted Mosby](agentes/ted-mosby.md) | Planejar/revisar | Estratégia, casos e evidências de QA; não implementa a feature |
+| [Neo](agentes/neo.md) | Planejar/revisar | Auditoria e testes de segurança; reporta e valida, não corrige feature |
+| [Jarvis](agentes/jarvis.md) | Implementar operação | Ambientes, pós-pipeline, deploy, rollback, observabilidade, backup e incidente |
+| [c4-diagram-generator](agentes/c4-diagram-generator.md) | Planejar/revisar | Diagramas C4 em PlantUML, fundamentados em FDD aprovado |
+
+---
+
+## Documentação no Obsidian
+
+A documentação oficial vive na base **`Minerva`** do vault Obsidian do usuário, **fora deste repositório**:
+
+```
+Windows : C:\Users\mclov\OneDrive\Documentos\Obsidian Vault\mclov\Documents\SecondBrain\Bases\Minerva
+WSL     : /mnt/c/Users/mclov/OneDrive/Documentos/Obsidian Vault/mclov/Documents/SecondBrain/Bases/Minerva
+```
+
+**A alteração na base faz parte da task — não é follow-up.** Como a base está fora do repositório, o diff do PR não a mostra: a atualização acontece no mesmo turno da mudança e os caminhos escritos são declarados explicitamente. Um PR que muda qualquer item abaixo sem a nota correspondente é reprovado na auditoria.
+
+Procedimento obrigatório, com a tabela de gatilhos e o formato das notas: `docs/skills/atualizar-obsidian.md`.
+
+Gatilhos obrigatórios (criação, edição **ou** remoção):
+
+- Regra de negócio
+- Dependência (adição, remoção ou upgrade relevante)
+- Banco de dados: tabelas, índices, triggers e funções
+- ADR
+- PRD
+- HLD
+- FDD
+- Roadmap
+- Roles
+- Skills
+- Agentes
+- Tasks
+
+Decisões estruturais e escolhas de tecnologia entram como **ADR** — inclusive as pendências listadas no fim deste documento.
+
+**ADR, PRD, HLD e as notas de responsabilidade têm cópia canônica na base e espelho no repositório** (`docs/adrs/`, `docs/hlds/`, `docs/prds/`, `docs/roles/`). As três regras de sincronia — base primeiro, base vence, só wikilink diverge — estão em *Arquitetura e testes → Cópia canônica e espelho*. Escrever num lado só, em qualquer direção, é gatilho não documentado e reprova na auditoria.
+
+---
+
+## Fluxo de trabalho
+
+Antes de qualquer delegação, o Homem de Ferro classifica a mudança como **via rápida** ou **fluxo completo**. Se identificar possível exceção enxuta, ele não a inicia nem a classifica autonomamente: explica escopo, motivo, controles mantidos e documentação dispensada, e pede autorização explícita do usuário para aquela mudança. Fora da exceção autorizada da regra 9, a classificação, as validações e os agentes acionados ficam registrados na task e no resumo decisório mínimo de `docs/plan.md` e `docs/state.md`.
+
+### Exceção enxuta: ajuste básico ou urgente
+
+```
+branch nova → PR → validações proporcionais → revisão independente → merge
+```
+
+Pela regra 9, ajuste básico e/ou urgente pode dispensar **task e documentação formal** somente após autorização explícita do usuário para aquela mudança e quando não introduz, altera ou remove comportamento de produto, regra de negócio, endpoint, contrato público, persistência, integração, dependência, segredo, permissão, pipeline, decisão arquitetural ou mudança estrutural.
+
+- A exceção não dispensa branch nova, PR, revisão independente, validação proporcional, segurança nem obrigação legal, regulatória ou contratual aplicável.
+- A LLM ou o orquestrador apenas identifica a possibilidade e pede autorização; não escolhe, classifica nem inicia essa exceção por conta própria.
+- Ela não se aplica a nenhum gatilho da regra 3. Se houver gatilho documental, a nota Obsidian continua obrigatória no mesmo turno; se houver dúvida, não usar a exceção.
+- O PR registra objetivamente o motivo de urgência ou simplicidade, escopo, validações executadas e a justificativa de não haver gatilho documental. Esse registro não substitui documento obrigatório.
+- Neo é acionado para qualquer superfície de segurança; se houver incerteza, acesso a arquivo, hook, permissão, segredo, dependência ou configuração sensível, a exceção para e retorna à via rápida ou ao fluxo completo.
+- Qualquer conflito material com outra regra de ferro segue a regra 10: pausar e pedir decisão do usuário com trade-offs, alternativas, impacto e regra excepcional.
+
+### Via rápida: manutenção sem comportamento de produto
+
+```
+task curta → implementação delimitada → validações proporcionais → revisão independente → merge
+```
+
+Usar somente para mudança documental, governança, adaptador de ferramenta, automação mecânica ou manutenção que **não** introduza, altere ou remova comportamento de produto, regra de negócio, endpoint, contrato público, persistência, integração, dependência ou decisão estrutural.
+
+- A task curta declara objetivo, arquivos ou superfície permitida, exclusões, validações e revisor independente.
+- PRD, HLD e FDD não são exigidos quando não houver comportamento de produto. Uma decisão estrutural continua exigindo ADR; impacto estrutural continua exigindo HLD.
+- A validação é proporcional e determinística sempre que possível: sintaxe, links, JSON, shell, diff, comportamento do hook ou automação tocada. A revisão independente continua obrigatória.
+- Segurança não é opcional: Neo é acionado quando a mudança toca permissões, hooks, segredos, dependências, pipeline, configuração, acesso a arquivos ou superfície de ataque. Jarvis é acionado para ambiente, deploy, rollback, observabilidade, backup ou custo. Ted é acionado se surgir comportamento observável ou contrato testável. Yoda é acionado para decisão estrutural, tecnologia, fronteira ou regra de governança.
+- Se durante a execução surgir comportamento de produto, risco não coberto ou decisão estrutural, a via rápida para e a mudança retorna ao fluxo completo.
+
+### Fluxo completo: feature ou mudança estrutural
+
+```
+roadmap → épico → PRD → HLD → FDD → task → PR → auditoria → merge → deploy
+```
+
+- **Roadmap:** direção do produto; origem de todo épico.
+- **Épico:** recorte grande derivado do roadmap.
+- **PRD:** o quê e o porquê, com critérios de aceite verificáveis.
+- **HLD:** como o sistema se organiza — partes, fronteiras, contratos entre elas. É obrigatório quando a mudança for estrutural. **Dono: Yoda.**
+- **FDD:** como cada feature funciona por dentro. É obrigatório quando houver comportamento, regra de negócio, integração, contrato público ou risco relevante. **Dono: quem implementa; revisor: Yoda.** O autor não revisa o próprio FDD (regra 4).
+- **Task:** unidade executável derivada do PRD e do FDD, com escopo fechado.
+- **Numeração de tasks:** a primeira task formal do ciclo atual é `T-001`; as seguintes avançam sequencialmente a partir dela. Não inferir a numeração por notas, arquivos ou registros históricos.
+- **PR:** entrega da task, com testes e evidências anexadas.
+- **Auditoria:** revisão contra PRD e regras de ferro, feita por agente diferente de quem implementou.
+- **Merge:** só após auditoria aprovada e pipelines verdes.
+- **Publicação e deploy:** seguem o workflow histórico restaurado; custo financeiro zero e os gates continuam obrigatórios.
+
+**ADR é transversal:** não ocupa posição na cadeia, porque uma decisão estrutural pode nascer em qualquer ponto dela — no PRD, no HLD, no FDD ou diante de um problema encontrado no código.
+
+Ao validar uma implementação, lê-se a cadeia **antes** do código: PRD, HLD, FDD e só então o diff. Ler o código primeiro faz avaliar se ele é coerente consigo mesmo, em vez de coerente com o que foi decidido.
+
+Não iniciar feature sem PRD e task correspondentes. Mudança estrutural também exige HLD; comportamento, regra de negócio, integração, contrato público ou risco relevante também exigem FDD aprovado. A exceção é a via rápida, limitada pelos critérios desta seção.
+
+### Resumo decisório mínimo
+
+Toda task e toda atualização semântica de `docs/plan.md` ou `docs/state.md` registra, em formato curto e factual:
+
+- **Objetivo:** resultado e limite da mudança.
+- **Decisão:** classificação da mudança, caminho escolhido e decisões aplicadas ou pendentes.
+- **Evidências:** validações executadas, resultados e artefatos consultados.
+- **Riscos e lacunas:** risco remanescente, `❓ LACUNA`, bloqueio ou "nenhum identificado" com base observada.
+- **Próximo passo:** ação concreta, dono e condição de continuidade ou conclusão.
+
+O resumo não substitui PRD, HLD, FDD ou ADR. Ele evita depender de histórico de chat e não pode declarar validação que não foi executada.
+
+### Conflito entre regras de ferro
+
+Conflito material não é resolvido por interpretação silenciosa. O agente interrompe a execução, descreve as regras e efeitos em colisão, alternativas viáveis, impacto de cada uma e qual regra seria excepcionalmente limitada, e pede ao usuário que escolha o trade-off. Até a decisão explícita, não implementa, aprova, faz merge nem declara conformidade.
+
+### Acionamento proporcional de agentes
+
+Todo PR recebe revisão independente de agente diferente de quem implementou. O orquestrador aciona somente as especialidades exigidas pelo risco, sem transformar agentes em etapa decorativa:
+
+| Gatilho | Acionamento obrigatório |
+|---|---|
+| Decisão de tecnologia, estrutura, fronteira, contrato entre módulos ou regra de governança | Yoda; ADR quando a decisão for estrutural ou tecnológica, HLD quando houver impacto estrutural |
+| Endpoint, comportamento observável, critério de aceite, fluxo, invariante ou contrato público | Ted; PRD e FDD conforme esta seção |
+| Autenticação, autorização, input/output, segredo, dependência, hook, pipeline, credencial, acesso a arquivo ou outra superfície de ataque | Neo |
+| Ambiente, container, deploy, rollback, observabilidade, backup/restore, capacidade ou custo de operação | Jarvis |
+
+Yoda, Ted, Neo e Jarvis mantêm pareceres independentes dentro do próprio escopo. Nenhum é chamado apenas para confirmar o trabalho de outro; ausência de gatilho deve ser justificada na task. A auditoria geral integra os pareceres aplicáveis, sem aprovar trabalho próprio.
+
+---
+
+## Arquitetura e testes
+
+### Decisões vigentes
+
+- Este repositório é um **template agnóstico de tecnologia**. Linguagem, framework, banco de dados, provedor de hospedagem, fila, cache, storage, ferramenta de teste e análise estática não estão escolhidos.
+- As únicas fundações definidas desde o início são **Git** para versionamento, **GitHub** para colaboração e automação versionada, e **Docker** para execução reprodutível. Configurações concretas permanecem `TBD` até uma ADR aprovada para a aplicação que consumir o template.
+- A aplicação é um **monólito modular** com oito bounded contexts: `Identidade`, `MatriculaAcademica`, `PlanejamentoPedagogico`, `Frequencia`, `AvaliacaoDesempenho`, `Comunicacao`, `Instituicao` e `RelatoriosGovernanca`.
+- O sistema escolar legado, quando usado como referência funcional ou origem de migração, é um fato histórico a ser validado no PRD e na ADR da aplicação consumidora. Vulnerabilidade do legado não é comportamento a preservar.
+- A **grade** é o eixo conceitual do modelo acadêmico, sem inferir entidade, tabela, ownership ou cardinalidade ainda não aprovados.
+- Storage, ambiente, CI executável, deploy e observabilidade são decisões por aplicação; devem atender custo zero, segurança e reprodutibilidade, sem pressupor fornecedor.
+- DDD, SOLID e os princípios de qualidade definidos por ADR orientam a arquitetura; os gates mecânicos são escolhidos depois que a stack for decidida.
+- GitHub hospeda a colaboração e pode executar automações versionadas quando a aplicação definir os workflows; nenhum workflow ou integração externa é presumido pelo template.
+
+A decisão estrutural inicial está na [ADR 001](adrs/adr-001-template-agnostico-de-tecnologia.md). Decisões adicionais só existem quando uma aplicação consumidora as registrar; este resumo não substitui esses documentos.
+
+**Cópia canônica e espelho.** A **base Obsidian é a cópia canônica** de ADR, PRD, HLD e das notas de responsabilidade — é o que a regra de ferro 3 determina. O repositório guarda um **espelho de leitura** em [`docs/adrs/`](adrs/), [`docs/hlds/`](hlds/), [`docs/prds/`](prds/) e [`docs/roles/`](roles/), para que um agente trabalhando no código leia a decisão sem depender de acesso ao vault. As duas cópias se mantêm em sincronia por três regras:
+
+1. **A base primeiro.** Toda criação ou edição desses documentos é escrita na base e espelhada no repositório **no mesmo turno**, nunca só de um lado.
+2. **A base vence.** Em divergência entre as cópias, vale a base; o espelho é regenerado a partir dela, não reconciliado à mão.
+3. **A única diferença permitida é mecânica.** O espelho preserva integralmente o corpo e o frontmatter da nota e converte apenas os wikilinks: `[[nota]]` vira um link Markdown para o caminho relativo da nota, e `[[nota|Rótulo]]` preserva o rótulo nesse link, porque wikilink não resolve fora do Obsidian. O frontmatter é mantido porque carrega informação de decisão — `status` de uma ADR, sobretudo — e porque manter as cópias byte a byte iguais fora dos links torna a divergência detectável por `diff`.
+
+A relação é inversa à das skills: skill tem definição canônica no repositório e registro na base; documento de decisão tem o canônico na base e espelho no repositório.
+
+**DDD.** O domínio é o núcleo: regras de negócio ficam isoladas de transporte, persistência e detalhes de framework. Infraestrutura depende do domínio, nunca o contrário. Contextos se comunicam por contratos explícitos, ids ou eventos, nunca importando silenciosamente entidades internas de outro contexto.
+
+**Testes de integração — obrigatórios para todo endpoint:**
+
+- Ferramenta: definida pela ADR de testes da aplicação, compatível com a interface ou contrato exposto.
+- **Idempotentes:** rodam repetidamente, em qualquer ordem, sem depender de estado deixado por execução anterior. Cada teste cria e limpa o próprio dado.
+- **Evidência obrigatória:** cada execução gera imagem e/ou vídeo, publicados como artefato do pipeline e referenciados no PR.
+
+Endpoint sem teste de integração com evidência não passa na auditoria.
+
+---
+
+## CI/CD
+
+Dois pipelines separados (regra 8), ambos em free tier (regra 5):
+
+1. **Pipeline de review** — revisão automatizada do PR: aderência às regras de ferro, ao PRD e à arquitetura; qualidade e consistência do código.
+2. **Pipeline de execução de casos de teste** — roda a suíte de testes de integração e publica as evidências definidas pela ADR de testes como artefato.
+
+Ambos são condição de merge. Publicação e deploy continuam sujeitos à regra de custo financeiro zero e ao workflow restaurado.
+
+---
+
+## Adaptadores por ferramenta
+
+| Arquivo | Ferramenta | Aponta para | Conteúdo permitido |
+|---|---|---|---|
+| `CLAUDE.md` | Claude Code | este documento | Ponteiro + regra de idioma |
+| `AGENTS.md` | Codex e demais agentes | este documento | Ponteiro + regra de idioma |
+| `.claude/skills/<skill>/SKILL.md` | Claude Code | `docs/skills/<skill>.md` | Frontmatter de descoberta + ponteiro |
+| `.claude/agents/<agente>.md` | Claude Code | `docs/agentes/<agente>.md` | Frontmatter de despacho (`model`, `effort`, `tools`) + ponteiro |
+| `.claude/hooks/sessao-orquestrador.sh` | Claude Code | `docs/agentes/homem-de-ferro.md` | Injeta o papel no `SessionStart` |
+| `.claude/hooks/guarda-orquestrador.sh` | Claude Code | `docs/agentes/homem-de-ferro.md` | Nega escrita fora de subagente (`PreToolUse`) |
+| `.claude/hooks/sincronizar-continuidade.sh` | Claude Code | convenção de continuidade + `docs/plan.md`/`docs/state.md` | Atualiza somente seções geradas após mutação (`PostToolUse`) |
+| `.codex/hooks.json` | Codex | este documento + `docs/agentes/homem-de-ferro.md` + convenção de continuidade | Declara os adaptadores de sessão, guarda preventiva e continuidade |
+| `.codex/hooks/sessao-orquestrador.sh` | Codex | `docs/agentes/homem-de-ferro.md` | Injeta o papel no `SessionStart` |
+| `.codex/hooks/guarda-orquestrador.sh` | Codex | `docs/agentes/homem-de-ferro.md` | Alerta antes de mutação; o payload não distingue sessão principal de subagente |
+| `.codex/hooks/sincronizar-continuidade.sh` | Codex | convenção de continuidade + `docs/plan.md`/`docs/state.md` | Encaminha a sincronização mecânica após mutação (`PostToolUse`) |
+
+Definição canônica de skill: `docs/skills/`. Fica no repositório, e não na base Obsidian, para que um agente trabalhando no código consiga lê-la sem depender de acesso à base. A base documenta que a skill existe (gatilho da regra 3); o repositório guarda a definição executável.
+
+Ao adicionar suporte a uma nova ferramenta, cria-se **mais um adaptador ponteiro** — nunca uma cópia do conteúdo. A regra de idioma (regra 2) é repetida inline nos adaptadores de propósito: ela precisa valer já na primeira resposta, antes mesmo deste documento ser lido.
+
+## Catálogo de skills
+
+Definições canônicas ficam em `docs/skills/`; adaptadores Claude ficam em `.claude/skills/`.
+
+| Skill | Uso |
+|---|---|
+| `atualizar-obsidian` | Sincronizar toda mudança que acione um gatilho documental |
+| `gerar-prd` | Entrevistar e gerar PRD de feature |
+| `gerar-hld` | Entrevistar e gerar HLD técnico |
+| `gerar-fdd` | Entrevistar e gerar FDD implementável |
+| `gerar-adr` | Analisar e registrar decisão arquitetural |
+| `criar-task` | Derivar task fechada do fluxo completo ou task curta da via rápida, com validações e revisão proporcionais |
+| `refinar-task` | Refinar um épico, por múltiplos papéis, antes do primeiro PRD |
+| `criar-migration` | Planejar migration reversível e verificável |
+| `api-design` | Planejar e revisar contratos de API |
+| `error-handling` | Modelar falhas, exceções e respostas |
+| `tdd-workflow` | Implementar por RED, GREEN e REFACTOR |
+| `deployment-patterns` | Implementar e revisar deploy já decidido |
+| `security-review` | Revisar segurança de FDD, código e configuração |
+| `security-scan` | Auditar agentes, hooks, skills e integrações de ferramenta |
+| `auditoria` | Auditar entrega entre PR e merge |
+| `mapear-codebase` | Mapear repositório existente somente por leitura |
+| `auditar-dependencias` | Auditar dependências diretas somente por leitura |
+| `deep-research` | Preparar briefing de Deep Research e reestruturar integralmente pesquisa já importada |
+
+## Playbooks
+
+Playbooks são consulta seletiva e não substituem ADR, HLD, FDD ou skill prescritiva.
+
+| Arquivo | Gatilho |
+|---|---|
+| `docs/playbooks/backend-e-padroes-de-sistema.md` | Idempotência, fila, eventos, resiliência, cache, lote e erros |
+| `docs/playbooks/banco-de-dados-e-sql.md` | Queries, índices, locks, paginação, importação e reconciliação |
+| `docs/playbooks/seguranca.md` | Autorização, injeção, autenticação, upload, PII, supply chain e LGPD |
+
+## Arquivos permanentes do projeto
+
+| Arquivo | Papel |
+|---|---|
+| `docs/rules.md` | Contrato canônico de governança, roles, decisões e catálogos |
+| `docs/plan.md` | Plano operacional da task ativa; checklist só muda por decisão do agente |
+| `docs/state.md` | Estado observado, mutações de arquivos e trabalho ainda pendente |
+| `docs/lib.md` | Inventário de todas as dependências, com nome, versões, finalidade e status |
+| `docs/roadmap.md` | Direção, fases e prioridades do produto |
+| `docs/infraestrutura.md` | Estado e operação da infraestrutura |
+| `docs/agentes/` | Definições canônicas dos agentes |
+| `docs/skills/` | Definições canônicas das skills |
+| `docs/playbooks/` | Referências diagnósticas e decisórias por gatilho |
+| `docs/adrs/` | Espelho das ADRs; cópia canônica na base Obsidian |
+| `docs/hlds/` | Espelho do HLD; cópia canônica na base Obsidian |
+| `docs/prds/` | Espelho dos PRDs; cópia canônica na base Obsidian |
+| `docs/roles/` | Espelho das três responsabilidades da regra 4; cópia canônica na base Obsidian |
+| `.env.example` | Contrato de configuração sem segredos; valores reais ficam fora do repositório |
+| `Dockerfile` ou `Containerfile` | Contrato de execução reprodutível, quando a aplicação o exigir |
+| `.github/workflows/` | Automação versionada no GitHub, definida pela aplicação consumidora |
+
+---
+
+## Pendências de decisão (exigem ADR antes de codar)
+
+Ainda não definidos pelo usuário — **não assumir nenhum destes sem confirmação**. A mesma lista está em `regras-de-ferro.md`, na base Obsidian:
+
+- Linguagem, framework, build, persistência, cache, fila, storage, frontend, provedor e topologia de execução.
+- Configuração do repositório GitHub, proteção de `main`, runners e estratégia adicional de branches.
+- Estratégia de imagem Docker, registry, identidade de deploy, retenção de artefatos e ambiente de publicação.
+- Formato de publicação das evidências de teste como artefato.
+- Fronteiras, ownership, agregados e contratos detalhados dos oito bounded contexts.
+- Acesso, schema, estratégia de cutover e as propriedades técnicas de qualquer legado, quando houver.
+
+O fato de uma tecnologia estar decidida não autoriza inventar configuração, versão ou topologia que a ADR manteve como `TBD`. Regra de negócio ausente continua sendo `❓ LACUNA`.

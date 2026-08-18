@@ -1,0 +1,122 @@
+name: Validar template
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validar-documentacao-e-adaptadores:
+    name: Validar documentação e adaptadores
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obter o repositório
+        uses: actions/checkout@v4
+
+      - name: Validar JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' arquivo; do
+            jq empty "$arquivo"
+          done < <(find .claude .codex -type f -name '*.json' -print0)
+
+      - name: Validar sintaxe dos scripts shell
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' arquivo; do
+            bash -n "$arquivo"
+          done < <(find .claude .codex -type f \( -name '*.sh' -o -name '*.bash' \) -print0)
+
+      - name: Validar paridade dos adaptadores
+        shell: bash
+        run: |
+          set -euo pipefail
+          for arquivo in docs/skills/*.md; do
+            nome="$(basename "$arquivo" .md)"
+            [ "$nome" = 'README' ] && continue
+            test -f ".claude/skills/$nome/SKILL.md"
+          done
+          for diretorio in .claude/skills/*; do
+            [ -d "$diretorio" ] || continue
+            nome="$(basename "$diretorio")"
+            test -f "docs/skills/$nome.md"
+          done
+          for arquivo in docs/agentes/*.md; do
+            nome="$(basename "$arquivo" .md)"
+            [ "$nome" = 'README' ] && continue
+            [ "$nome" = 'homem-de-ferro' ] && continue
+            test -f ".claude/agents/$nome.md"
+          done
+          for arquivo in .claude/agents/*.md; do
+            nome="$(basename "$arquivo" .md)"
+            test -f "docs/agentes/$nome.md"
+          done
+
+      - name: Rejeitar bytecode e cache versionáveis
+        shell: bash
+        run: |
+          set -euo pipefail
+          if find . -type d -name '__pycache__' -o -type f -name '*.pyc' | grep -q .; then
+            printf 'Bytecode ou cache não deve ser versionado.\n' >&2
+            exit 1
+          fi
+
+      - name: Executar smoke tests dos hooks
+        shell: bash
+        run: |
+          set -euo pipefail
+          temporario="$(mktemp -d)"
+          trap 'rm -rf "$temporario"' EXIT
+          executar() {
+            local nome="$1"
+            shift
+            : >"$temporario/saida"
+            : >"$temporario/erro"
+            printf '%s' '{"tool_name":"Read","tool_input":{}}' | "$@" >"$temporario/saida" 2>"$temporario/erro"
+            if [ -s "$temporario/erro" ]; then
+              printf 'Hook gerou stderr: %s\n' "$nome" >&2
+              cat "$temporario/erro" >&2
+              exit 1
+            fi
+          }
+          executar 'Claude guarda' bash .claude/hooks/guarda-orquestrador.sh
+          executar 'Codex guarda' bash .codex/hooks/guarda-orquestrador.sh
+          executar 'Claude sessão' bash .claude/hooks/sessao-orquestrador.sh
+          executar 'Codex sessão' bash .codex/hooks/sessao-orquestrador.sh
+          cp -a . "$temporario/repo"
+          executar 'Claude continuidade init' bash "$temporario/repo/.claude/hooks/sincronizar-continuidade.sh" init
+          executar 'Claude continuidade sync' bash "$temporario/repo/.claude/hooks/sincronizar-continuidade.sh" sync
+          executar 'Codex continuidade init' bash "$temporario/repo/.codex/hooks/sincronizar-continuidade.sh" init
+          executar 'Codex continuidade sync' bash "$temporario/repo/.codex/hooks/sincronizar-continuidade.sh" sync
+
+      - name: Validar referências Markdown internas
+        shell: bash
+        run: |
+          set -euo pipefail
+          # O espelho histórico completo é progressivo. Este gate cobre os
+          # documentos operacionais e adaptadores mantidos pelo template.
+          while IFS= read -r referencia; do
+            origem="${referencia%%:*}"
+            link="${referencia#*:*:}"
+            destino="${link#](}"
+            destino="${destino%)}"
+            destino="${destino%%#*}"
+
+            case "$destino" in
+              http://*|https://*) continue ;;
+            esac
+
+            if [ ! -f "$(dirname "$origem")/$destino" ]; then
+              printf 'Referência Markdown inexistente em %s: %s\n' "$origem" "$destino" >&2
+              exit 1
+            fi
+          done < <(grep -rHnoE ']\(([^)#?]+\.md)(#[^)]*)?\)' \
+            README.md \
+            docs \
+            --include='*.md' 2>/dev/null || true)
